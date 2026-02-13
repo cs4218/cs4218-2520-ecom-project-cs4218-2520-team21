@@ -10,7 +10,7 @@ jest.mock("../helpers/authHelper.js", () => ({
 }));
 jest.mock("jsonwebtoken");
 
-describe("Login Controller", () => {
+describe("Given a login request with credentials", () => {
   let req, res;
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe("Login Controller", () => {
     userModel.mockReset && userModel.mockReset();
   });
 
-  test("Mising email", async () => {
+  test("When the request is missing email", async () => {
     req.body.email = undefined;
 
     await loginController(req, res);
@@ -41,7 +41,7 @@ describe("Login Controller", () => {
     });
   });
 
-  test("Mising password", async () => {
+  test("When the request is missing password", async () => {
     req.body.password = undefined;
 
     await loginController(req, res);
@@ -53,7 +53,7 @@ describe("Login Controller", () => {
     });
   });
 
-  test("Unregisterd Email", async () => {
+  test("When the login request contains unregisterd email", async () => {
     userModel.findOne.mockResolvedValue(null);
 
     await loginController(req, res);
@@ -65,7 +65,7 @@ describe("Login Controller", () => {
     });
   });
 
-  test("Wrong password", async () => {
+  test("When the request contains wrong password", async () => {
     authHelper.comparePassword.mockResolvedValue(null);
     userModel.findOne.mockResolvedValue(true);
 
@@ -78,7 +78,7 @@ describe("Login Controller", () => {
     });
   });
 
-  test("Successful login", async () => {
+  test("When login is successful", async () => {
     const user = { name: "user" };
     const jwt = { name: "JWT" };
     authHelper.comparePassword.mockResolvedValue(true);
@@ -96,7 +96,7 @@ describe("Login Controller", () => {
     });
   });
 
-  test("On exception thrown", async () => {
+  test("When exception is thrown", async () => {
     userModel.findOne.mockImplementation(() => {
       throw new Error("some exception");
     });

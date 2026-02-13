@@ -8,7 +8,7 @@ jest.mock("../helpers/authHelper.js", () => ({
 }));
 jest.mock("jsonwebtoken");
 
-describe("Register Controller", () => {
+describe("Given a registration request with user credentials", () => {
   let req, res;
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe("Register Controller", () => {
     userModel.mockReset && userModel.mockReset();
   });
 
-  test("Missing name", async () => {
+  test("When the request is missing name", async () => {
     req.body.name = undefined;
 
     await registerController(req, res);
@@ -38,7 +38,7 @@ describe("Register Controller", () => {
     expect(res.send).toHaveBeenCalledWith({ error: "Name is Required" });
   });
 
-  test("Missing email", async () => {
+  test("When the request is missing email", async () => {
     req.body.email = undefined;
 
     await registerController(req, res);
@@ -46,7 +46,7 @@ describe("Register Controller", () => {
     expect(res.send).toHaveBeenCalledWith({ message: "Email is Required" });
   });
 
-  test("Missing password", async () => {
+  test("When the request is missing password", async () => {
     req.body.password = undefined;
 
     await registerController(req, res);
@@ -54,7 +54,7 @@ describe("Register Controller", () => {
     expect(res.send).toHaveBeenCalledWith({ message: "Password is Required" });
   });
 
-  test("Missing phone number", async () => {
+  test("When the request is missing phone number", async () => {
     req.body.phone = undefined;
 
     await registerController(req, res);
@@ -64,7 +64,7 @@ describe("Register Controller", () => {
     });
   });
 
-  test("Missing address", async () => {
+  test("When the request is missing address", async () => {
     req.body.address = undefined;
 
     await registerController(req, res);
@@ -72,7 +72,7 @@ describe("Register Controller", () => {
     expect(res.send).toHaveBeenCalledWith({ message: "Address is Required" });
   });
 
-  test("Missing answer", async () => {
+  test("When the request is missing answer", async () => {
     req.body.answer = undefined;
 
     await registerController(req, res);
@@ -82,7 +82,7 @@ describe("Register Controller", () => {
     });
   });
 
-  test("Existing user", async () => {
+  test("When the email is of an existing user", async () => {
     userModel.findOne.mockResolvedValue(true);
 
     await registerController(req, res);
@@ -94,7 +94,7 @@ describe("Register Controller", () => {
     });
   });
 
-  test("Successful registration", async () => {
+  test("When registration is success", async () => {
     const savedUser = { value: "saved user" };
     userModel.findOne.mockResolvedValue(null);
     userModel.mockImplementation(() => ({
@@ -113,7 +113,7 @@ describe("Register Controller", () => {
     );
   });
 
-  test("On exception thrown", async () => {
+  test("When exception thrown", async () => {
     userModel.findOne.mockImplementation(() => {
       throw new Error("some exception");
     });

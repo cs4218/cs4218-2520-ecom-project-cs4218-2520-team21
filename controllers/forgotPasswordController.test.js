@@ -8,7 +8,7 @@ jest.mock("../helpers/authHelper.js", () => ({
   hashPassword: jest.fn().mockResolvedValue("hashed"),
 }));
 
-describe("Forgot password controller", () => {
+describe("Given a forgot password request with user credentials", () => {
   let req, res;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe("Forgot password controller", () => {
     userModel.mockReset && userModel.mockReset();
   });
 
-  test("Mising email", async () => {
+  test("When the request is missing email", async () => {
     req.body.email = undefined;
 
     await forgotPasswordController(req, res);
@@ -40,7 +40,7 @@ describe("Forgot password controller", () => {
     });
   });
 
-  test("Mising newPassword", async () => {
+  test("When the request is missing newPassword", async () => {
     req.body.newPassword = undefined;
 
     await forgotPasswordController(req, res);
@@ -52,7 +52,7 @@ describe("Forgot password controller", () => {
     });
   });
 
-  test("Missing answer", async () => {
+  test("When the request is missing answer", async () => {
     req.body.answer = undefined;
 
     await forgotPasswordController(req, res);
@@ -64,7 +64,7 @@ describe("Forgot password controller", () => {
     });
   });
 
-  test("Password rest with invalid email and answer", async () => {
+  test("When password reset email and answer does not match", async () => {
     userModel.findOne.mockResolvedValue(null);
 
     await forgotPasswordController(req, res);
@@ -76,7 +76,7 @@ describe("Forgot password controller", () => {
     });
   });
 
-  test("Successful register", async () => {
+  test("When forget password request is success", async () => {
     userModel.findOne.mockResolvedValue(true);
 
     await forgotPasswordController(req, res);
@@ -88,7 +88,7 @@ describe("Forgot password controller", () => {
     });
   });
 
-  test("On exception thrown", async () => {
+  test("When exception is thrown", async () => {
     userModel.findOne.mockImplementation(() => {
       throw new Error("some exception");
     });
