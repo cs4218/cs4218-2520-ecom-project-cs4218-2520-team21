@@ -295,7 +295,7 @@ describe("Cart Summary", () => {
       expect(await screen.findByText("Mocked Braintree DropIn")).toBeInTheDocument();
 
       expect(screen.getByText("Make Payment")).toBeInTheDocument();
-      expect(screen.getByText("Make Payment")).toBeEnabled();
+      await waitFor(() => expect(screen.getByText("Make Payment")).toBeEnabled());
     });
 
     it("should display disabled payment button if authenticated with address and cart is populated", async () => {
