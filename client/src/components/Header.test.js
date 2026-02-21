@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -7,6 +8,18 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/auth";
 import { useCart } from "../context/cart";
 import useCategory from "../hooks/useCategory";
+
+jest.mock("antd", () => ({
+  Badge: ({ count, showZero, children }) => (
+    <div
+      data-testid="cart-badge"
+      data-count={String(count)}
+      data-showzero={String(showZero)}
+    >
+      {children}
+    </div>
+  ),
+}));
 
 jest.mock("react-hot-toast");
 
@@ -71,7 +84,7 @@ describe("Header Component", () => {
     expect(getByText("Login")).toBeInTheDocument();
   });
 
-  it("shows user name and Dashboard when user is authenticated", () => {
+  it("shows user name and Dashboard when normal user is authenticated", () => {
     const mockAuth = {
       user: { name: "John Doe", role: 0 },
       token: "mockToken",
@@ -87,7 +100,9 @@ describe("Header Component", () => {
     );
 
     expect(getByText("John Doe")).toBeInTheDocument();
-    expect(getByText("Dashboard")).toBeInTheDocument();
+    const dashBoard = getByText("Dashboard");
+    expect(dashBoard).toBeInTheDocument();
+    expect(dashBoard).toHaveAttribute("href", "/dashboard/user");
     expect(getByText("Logout")).toBeInTheDocument();
     expect(queryByText("Register")).not.toBeInTheDocument();
     expect(queryByText("Login")).not.toBeInTheDocument();
@@ -136,13 +151,17 @@ describe("Header Component", () => {
     useCart.mockReturnValue([[{ id: 1 }, { id: 2 }, { id: 3 }]]);
     useCategory.mockReturnValue([]);
 
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
       <MemoryRouter>
         <Header />
       </MemoryRouter>,
     );
 
     expect(getByText("Cart")).toBeInTheDocument();
+
+    const badge = getByTestId("cart-badge");
+    expect(badge).toHaveAttribute("data-count", "3");
+    expect(badge).toHaveAttribute("data-showzero", "true");
   });
 
   it("renders categories in dropdown", () => {

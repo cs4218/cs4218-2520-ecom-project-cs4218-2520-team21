@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 import React from "react";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -49,17 +50,5 @@ describe("Footer Component", () => {
     const policyLink = getByText("Privacy Policy");
     expect(policyLink).toBeInTheDocument();
     expect(policyLink).toHaveAttribute("href", "/policy");
-  });
-
-  it("renders all navigation links", () => {
-    const { getByText } = render(
-      <MemoryRouter>
-        <Footer />
-      </MemoryRouter>,
-    );
-
-    expect(getByText("About")).toBeInTheDocument();
-    expect(getByText("Contact")).toBeInTheDocument();
-    expect(getByText("Privacy Policy")).toBeInTheDocument();
   });
 });

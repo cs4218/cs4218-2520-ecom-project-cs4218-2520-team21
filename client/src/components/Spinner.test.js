@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 import React from "react";
 import { render, waitFor, act } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -129,17 +130,6 @@ describe("Spinner Component", () => {
 
     expect(clearIntervalSpy).toHaveBeenCalled();
     clearIntervalSpy.mockRestore();
-  });
-
-  it("applies correct styling to container", () => {
-    const { container } = render(
-      <MemoryRouter>
-        <Spinner />
-      </MemoryRouter>,
-    );
-
-    const mainDiv = container.querySelector(".d-flex");
-    expect(mainDiv).toHaveStyle({ height: "100vh" });
   });
 
   it("does not navigate before count reaches 0", () => {

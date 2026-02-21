@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 import React from "react";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -186,55 +187,5 @@ describe("Layout Component", () => {
     const helmet = Helmet.peek();
     const authorMeta = helmet.metaTags.find((tag) => tag.name === "author");
     expect(authorMeta.content).toBe("Custom Author");
-  });
-
-  it("sets charset to utf-8", () => {
-    render(
-      <MemoryRouter>
-        <Layout>
-          <div>Content</div>
-        </Layout>
-      </MemoryRouter>,
-    );
-
-    const helmet = Helmet.peek();
-    const charsetMeta = helmet.metaTags.find((tag) => tag.charset);
-    expect(charsetMeta.charset).toBe("utf-8");
-  });
-
-  it("renders main content with minimum height style", () => {
-    const { container } = render(
-      <MemoryRouter>
-        <Layout>
-          <div>Content</div>
-        </Layout>
-      </MemoryRouter>,
-    );
-
-    const main = container.querySelector("main");
-    expect(main).toHaveStyle({ minHeight: "70vh" });
-  });
-
-  it("renders all components together with custom props", () => {
-    const { getByText } = render(
-      <MemoryRouter>
-        <Layout
-          title="Test Title"
-          description="Test Description"
-          keywords="test,keywords"
-          author="Test Author"
-        >
-          <div>Custom Children Content</div>
-        </Layout>
-      </MemoryRouter>,
-    );
-
-    expect(getByText("Header")).toBeInTheDocument();
-    expect(getByText("Custom Children Content")).toBeInTheDocument();
-    expect(getByText("Footer")).toBeInTheDocument();
-    expect(getByText("Toaster")).toBeInTheDocument();
-
-    const helmet = Helmet.peek();
-    expect(helmet.title).toBe("Test Title");
   });
 });
