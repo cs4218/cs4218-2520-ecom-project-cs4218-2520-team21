@@ -83,9 +83,7 @@ const CartPage = () => {
         <div className="row">
           <div className="col-md-12">
             <h1 className="text-center bg-light p-2 mb-1">
-              {!auth?.user
-                ? "Hello Guest"
-                : `Hello  ${auth?.token && auth?.user?.name}`}
+              {!auth?.user ? "Hello Guest" : `Hello  ${auth?.user?.name}`}
               <p className="text-center">
                 {cart?.length
                   ? `You Have ${cart.length} items in your cart ${
@@ -116,10 +114,7 @@ const CartPage = () => {
                     <p>Price : {p.price}</p>
                   </div>
                   <div className="col-md-4 cart-remove-btn">
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => removeCartItem(p._id)}
-                    >
+                    <button className="btn btn-danger" onClick={() => removeCartItem(p._id)}>
                       Remove
                     </button>
                   </div>
@@ -162,7 +157,7 @@ const CartPage = () => {
                         })
                       }
                     >
-                      Plase Login to checkout
+                      Please Login to checkout
                     </button>
                   )}
                 </div>
