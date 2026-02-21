@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 import { loginController } from "./authController.js";
 import userModel from "../models/userModel.js";
 import * as authHelper from "../helpers/authHelper.js";
@@ -66,8 +67,8 @@ describe("Given a login request with credentials", () => {
   });
 
   test("When the request contains wrong password", async () => {
-    authHelper.comparePassword.mockResolvedValue(null);
     userModel.findOne.mockResolvedValue(true);
+    authHelper.comparePassword.mockResolvedValue(false);
 
     await loginController(req, res);
 
@@ -97,9 +98,7 @@ describe("Given a login request with credentials", () => {
   });
 
   test("When exception is thrown", async () => {
-    userModel.findOne.mockImplementation(() => {
-      throw new Error("some exception");
-    });
+    userModel.findOne.mockRejectedValue(new Error("some exception"));
 
     await loginController(req, res);
 
@@ -111,5 +110,3 @@ describe("Given a login request with credentials", () => {
     });
   });
 });
-
-

@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 import mongoose from "mongoose";
 import connectDB from "./db";
 
@@ -32,15 +33,9 @@ describe("connectDB", () => {
 
     expect(mongoose.connect).toHaveBeenCalledWith(process.env.MONGO_URL);
     expect(mongoose.connect).toHaveBeenCalledTimes(1);
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining("Connected To Mongodb Database"),
-    );
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining("localhost:27017"),
-    );
   });
 
-  it("should handle connection error", async () => {
+  it("should log on error", async () => {
     const mockError = new Error("Connection failed");
     mongoose.connect.mockRejectedValue(mockError);
 

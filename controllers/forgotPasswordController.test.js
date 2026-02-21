@@ -1,7 +1,6 @@
+// Paing Khant Kyaw, A0257992J
 import { forgotPasswordController } from "./authController.js";
 import userModel from "../models/userModel.js";
-import * as authHelper from "../helpers/authHelper.js";
-import JWT from "jsonwebtoken";
 
 jest.mock("../models/userModel.js");
 jest.mock("../helpers/authHelper.js", () => ({
@@ -89,9 +88,7 @@ describe("Given a forgot password request with user credentials", () => {
   });
 
   test("When exception is thrown", async () => {
-    userModel.findOne.mockImplementation(() => {
-      throw new Error("some exception");
-    });
+    userModel.findOne.mockRejectedValue(new Error("find one exception"));
 
     await forgotPasswordController(req, res);
 
@@ -99,7 +96,7 @@ describe("Given a forgot password request with user credentials", () => {
     expect(res.send).toHaveBeenCalledWith({
       success: false,
       message: "Something went wrong",
-      error: new Error("some exception"),
+      error: new Error("find one exception"),
     });
   });
 });

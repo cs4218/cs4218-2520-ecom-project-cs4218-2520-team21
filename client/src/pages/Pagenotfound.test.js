@@ -15,7 +15,7 @@ jest.mock("./../components/Layout", () => {
 });
 
 describe("Pagenotfound Page", () => {
-  it("renders Pagenotfound page", () => {
+  it("renders essential component on Pagenotfound page", () => {
     const { container, getByText } = render(
       <MemoryRouter>
         <Pagenotfound />

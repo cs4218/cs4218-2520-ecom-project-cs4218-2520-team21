@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 import { registerController } from "./authController.js";
 import userModel from "../models/userModel.js";
 
@@ -114,9 +115,7 @@ describe("Given a registration request with user credentials", () => {
   });
 
   test("When exception thrown", async () => {
-    userModel.findOne.mockImplementation(() => {
-      throw new Error("some exception");
-    });
+    userModel.findOne.mockRejectedValue(new Error("some exception"));
 
     await registerController(req, res);
 
@@ -128,4 +127,3 @@ describe("Given a registration request with user credentials", () => {
     });
   });
 });
-

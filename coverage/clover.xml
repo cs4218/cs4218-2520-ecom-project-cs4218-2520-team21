@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1771142861762" clover="3.2.0">
-  <project timestamp="1771142861763" name="All files">
-    <metrics statements="288" coveredstatements="88" conditionals="84" coveredconditionals="34" methods="35" coveredmethods="8" elements="407" coveredelements="130" complexity="0" loc="288" ncloc="288" packages="4" files="6" classes="6"/>
+<coverage generated="1771649959195" clover="3.2.0">
+  <project timestamp="1771649959195" name="All files">
+    <metrics statements="289" coveredstatements="89" conditionals="84" coveredconditionals="34" methods="35" coveredmethods="8" elements="408" coveredelements="131" complexity="0" loc="289" ncloc="289" packages="4" files="6" classes="6"/>
     <package name="config">
       <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="db.js" path="C:\Users\65903\dev\school\cs4218-2520-ecom-project-cs4218-2520-team21\config\db.js">
@@ -291,33 +291,34 @@
       <file name="authHelper.js" path="C:\Users\65903\dev\school\cs4218-2520-ecom-project-cs4218-2520-team21\helpers\authHelper.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="4" count="5" type="stmt"/>
-        <line num="5" count="5" type="stmt"/>
-        <line num="6" count="5" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
-        <line num="10" count="3" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
-        <line num="15" count="3" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
       </file>
     </package>
     <package name="middlewares">
-      <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+      <metrics statements="15" coveredstatements="15" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
       <file name="authMiddleware.js" path="C:\Users\65903\dev\school\cs4218-2520-ecom-project-cs4218-2520-team21\middlewares\authMiddleware.js">
-        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <metrics statements="15" coveredstatements="15" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
         <line num="5" count="1" type="stmt"/>
-        <line num="6" count="5" type="stmt"/>
-        <line num="7" count="5" type="stmt"/>
-        <line num="11" count="3" type="stmt"/>
-        <line num="12" count="3" type="stmt"/>
-        <line num="14" count="2" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="20" count="5" type="stmt"/>
-        <line num="21" count="5" type="stmt"/>
-        <line num="22" count="3" type="cond" truecount="4" falsecount="0"/>
-        <line num="23" count="2" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
-        <line num="31" count="2" type="stmt"/>
-        <line num="32" count="2" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="25" count="4" type="stmt"/>
+        <line num="26" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
       </file>
     </package>
   </project>

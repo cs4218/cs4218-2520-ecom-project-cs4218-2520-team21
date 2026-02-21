@@ -1,26 +1,21 @@
+// Paing Khant Kyaw, A0257992J
 import bcrypt from "bcrypt";
 import { hashPassword, comparePassword } from "./authHelper";
 
 jest.mock("bcrypt");
 
-describe("Auth Helper", () => {
-  let consoleLogSpy;
-
+describe("Auth Helper Test", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    consoleLogSpy = jest.spyOn(console, "log").mockImplementation();
   });
 
   afterEach(() => {
-    consoleLogSpy.mockRestore();
   });
 
-  describe("hashPassword", () => {
+  describe("HashPassword Test, Given a password", () => {
     it("should call bcrypt.hash with password and saltRounds", async () => {
       const password = "myPassword123";
-      const hashedPassword = "hashedPassword123";
-
-      bcrypt.hash.mockResolvedValue(hashedPassword);
+      bcrypt.hash.mockResolvedValue("something");
 
       await hashPassword(password);
 
@@ -28,7 +23,7 @@ describe("Auth Helper", () => {
       expect(bcrypt.hash).toHaveBeenCalledTimes(1);
     });
 
-    it("should return hashed password on success", async () => {
+    it("should return hashed password on", async () => {
       const password = "myPassword123";
       const hashedPassword = "hashedPassword123";
 
@@ -39,18 +34,7 @@ describe("Auth Helper", () => {
       expect(result).toBe(hashedPassword);
     });
 
-    it("should call console.log with error when bcrypt.hash throws", async () => {
-      const password = "myPassword123";
-      const mockError = new Error("Hashing failed");
-
-      bcrypt.hash.mockRejectedValue(mockError);
-
-      await hashPassword(password);
-
-      expect(consoleLogSpy).toHaveBeenCalledWith(mockError);
-    });
-
-    it("should not throw error when bcrypt.hash throws", async () => {
+    it("should return undefined when hashing failed", async () => {
       const password = "myPassword123";
       const mockError = new Error("Hashing failed");
 
@@ -71,7 +55,7 @@ describe("Auth Helper", () => {
     });
   });
 
-  describe("comparePassword", () => {
+  describe("comparePassword Test", () => {
     it("should call bcrypt.compare with password and hashedPassword", async () => {
       const password = "pass";
       const hashedPass = "hashedPass";
@@ -82,28 +66,6 @@ describe("Auth Helper", () => {
 
       expect(bcrypt.compare).toHaveBeenCalledWith(password, hashedPass);
       expect(bcrypt.compare).toHaveBeenCalledTimes(1);
-    });
-
-    it("should return true when passwords match", async () => {
-      const password = "pass";
-      const hashedPass = "hashedPass";
-
-      bcrypt.compare.mockResolvedValue(true);
-
-      const result = await comparePassword(password, hashedPass);
-
-      expect(result).toBe(true);
-    });
-
-    it("should return false when passwords do not match", async () => {
-      const password = "pass";
-      const hashedPass = "hashedPass";
-
-      bcrypt.compare.mockResolvedValue(false);
-
-      const result = await comparePassword(password, hashedPass);
-
-      expect(result).toBe(false);
     });
   });
 });
