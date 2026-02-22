@@ -33,7 +33,7 @@ jest.mock("react-router-dom", () => {
   };
 });
 
-describe("CreateProduct Component", () => {
+describe("CreateProduct test", () => {
   const categoriesMock = [
     { _id: "1", name: "Electronics" },
     { _id: "2", name: "Books" },
@@ -49,8 +49,9 @@ describe("CreateProduct Component", () => {
   afterEach(() => {
     jest.clearAllMocks();
     global.URL.createObjectURL.mockReset();
-});
-  test("renders layout, menu, and categories", async () => {
+  });
+
+  test("renders basic layout and form fields", async () => {
     await act(async () => {
       render(
         <MemoryRouter>
@@ -63,16 +64,25 @@ describe("CreateProduct Component", () => {
     expect(screen.getByText("Mocked AdminMenu")).toBeInTheDocument();
     expect(screen.getByText("Create Product")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("write a name")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("write a description")).toBeInTheDocument();
-  
+    expect(screen.getByPlaceholderText("write a Price")).toBeInTheDocument();
+  });
 
+  test("fetches and displays categories in the dropdown", async () => {
     
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <CreateProduct />
+        </MemoryRouter>
+      );
+    });
+
     await waitFor(() => {
       const selectPlaceholder = screen.getByText("Select a category");
-      fireEvent.mouseDown(selectPlaceholder); 
-
+      fireEvent.mouseDown(selectPlaceholder);
       expect(screen.getByText("Electronics")).toBeInTheDocument();
       expect(screen.getByText("Books")).toBeInTheDocument();
+
     });
   });
 
@@ -102,7 +112,7 @@ describe("CreateProduct Component", () => {
 });
 
 
-  test("creates a product", async () => {
+  test("calls create product api", async () => {
     await act(async () => {
       render(
         <MemoryRouter>
@@ -111,25 +121,8 @@ describe("CreateProduct Component", () => {
       );
     });
 
- 
     fireEvent.change(screen.getByPlaceholderText("write a name"), { target: { value: "Laptop" } });
-    fireEvent.change(screen.getByPlaceholderText("write a description"), {
-      target: { value: "High-end laptop" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("write a Price"), { target: { value: 1200 } });
-    fireEvent.change(screen.getByPlaceholderText("write a quantity"), { target: { value: 5 } });
-
-
-    const selectCategory = screen.getByText("Select a category");
-    fireEvent.mouseDown(selectCategory);
-    fireEvent.click(screen.getByText("Electronics"));
-
-  
-    const selectShipping = screen.getByText("Select Shipping");
-    fireEvent.mouseDown(selectShipping);
-    fireEvent.click(screen.getByText("Yes"));
-
-
+    
     fireEvent.click(screen.getByText("CREATE PRODUCT"));
 
     await waitFor(() => {
@@ -140,23 +133,31 @@ describe("CreateProduct Component", () => {
     });
   });
 
-  test("creates product successfully", async () => {
-  
- 
-    axios.post.mockResolvedValueOnce({
-      data: { success: true } 
-    });
 
+  test("updates category state when a category is selected", async () => {
     render(
       <MemoryRouter>
         <CreateProduct />
       </MemoryRouter>
     );
 
-    
-    await waitFor(() => expect(screen.getByText("Create Product")).toBeInTheDocument());
+    const selectCategory = await screen.findByText("Select a category");
+    fireEvent.mouseDown(selectCategory);
+    const option = await screen.findByText("Electronics");
+    fireEvent.click(option);
+    expect(screen.getAllByText("Electronics").length).toBeGreaterThanOrEqual(1);
+  });
 
-    fireEvent.change(screen.getByPlaceholderText("write a name"), { target: { value: "Laptop" } });
+  test("handles successful API response correctly", async () => {
+    axios.post.mockResolvedValueOnce({ data: { success: true } });
+
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <CreateProduct />
+        </MemoryRouter>
+      );
+    });
 
     fireEvent.click(screen.getByText("CREATE PRODUCT"));
 
@@ -165,6 +166,27 @@ describe("CreateProduct Component", () => {
       expect(mockNavigate).toHaveBeenCalledWith("/dashboard/admin/products");
     });
   });
+
+  test("updates shipping state when select value changes", async () => {
+    render(
+      <MemoryRouter>
+        <CreateProduct />
+      </MemoryRouter>
+    );
+
+    const shippingSelect = screen.getByText("Select Shipping");
+    fireEvent.mouseDown(shippingSelect);
+    
+    const yesOption = screen.getByText("Yes");
+    fireEvent.click(yesOption);
+
+    fireEvent.click(screen.getByText("CREATE PRODUCT"));
+
+    await waitFor(() => {
+      const formData = axios.post.mock.calls[0][1];
+      expect(formData.get("shipping")).toBe("1"); 
+    });
+});
 
   test("shows toast error when fetching categories fails", async () => {
     const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
@@ -192,49 +214,49 @@ describe("CreateProduct Component", () => {
     logSpy.mockRestore();
 });
 
-test("uploads photo and shows preview", async () => {
-  render(
-      <MemoryRouter>
-        <CreateProduct />
-      </MemoryRouter>
-    );
+  test("shows error toast when server returns success false on creation", async () => {
+    axios.post.mockResolvedValueOnce({
+      data: { success: false, message: "Product name already exists" }
+    });
 
-  const file = new File(["dummy"], "laptop.png", { type: "image/png" });
-  const uploadInput = screen.getByLabelText(/upload photo/i);
+    render(<MemoryRouter><CreateProduct /></MemoryRouter>);
 
-  fireEvent.change(uploadInput, { target: { files: [file] } });
+    fireEvent.click(screen.getByText("CREATE PRODUCT"));
 
-  await waitFor(() => {expect(screen.getByAltText("product_photo")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith("Product name already exists");
+    });
   });
-});
 
-test("change photo display name", async () => {
-  render(
-      <MemoryRouter>
-        <CreateProduct />
-      </MemoryRouter>
-    );
+  test("uploads photo and shows preview and filename successfully", async () => {
+    render(
+        <MemoryRouter>
+          <CreateProduct />
+        </MemoryRouter>
+      );
 
- ;
+    const file = new File(["dummy"], "laptop.png", { type: "image/png" });
+    const uploadInput = screen.getByLabelText(/upload photo/i);
 
-  const uploadInput = screen.getByLabelText(/upload photo/i);
-  const file = new File(["dummy"], "laptop.png", { type: "image/png" });
-  fireEvent.change(uploadInput, { target: { files: [file] } }); 
-  
+    fireEvent.change(uploadInput, { target: { files: [file] } });
 
-  await waitFor(() => {expect(screen.getByText("laptop.png")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByAltText("product_photo")).toBeInTheDocument();
+      expect(screen.getByText("laptop.png")).toBeInTheDocument();
+      expect(screen.queryByText("Upload Photo")).not.toBeInTheDocument();
+    });
   });
-});
 
-test("no image selected", async () => {
-  render(
-      <MemoryRouter>
-        <CreateProduct />
-      </MemoryRouter>
-    );
 
-  
-    await waitFor(() => {expect(screen.queryByAltText("product_photo")).toBeNull();
+  test("does not show preview when no image is selected", async () => {
+    render(
+        <MemoryRouter>
+          <CreateProduct />
+        </MemoryRouter>
+      );
+      await waitFor(() => {
+        expect(screen.queryByAltText("product_photo")).toBeNull();
+        expect(screen.getByText("Upload Photo")).toBeInTheDocument();
+    });
   });
-});
 });
