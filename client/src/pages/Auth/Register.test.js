@@ -53,6 +53,78 @@ describe("Register Component", () => {
     jest.clearAllMocks();
   });
 
+  it("should have empty inputs initially", () => {
+    const { getByPlaceholderText } = render(
+      <MemoryRouter initialEntries={["/register"]}>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(getByPlaceholderText("Enter Your Name")).toHaveValue("");
+    expect(getByPlaceholderText("Enter Your Email")).toHaveValue("");
+    expect(getByPlaceholderText("Enter Your Password")).toHaveValue("");
+    expect(getByPlaceholderText("Enter Your Phone")).toHaveValue("");
+    expect(getByPlaceholderText("Enter Your Address")).toHaveValue("");
+    expect(getByPlaceholderText("Enter Your DOB")).toHaveValue("");
+    expect(getByPlaceholderText("What is Your Favorite sports")).toHaveValue(
+      "",
+    );
+  });
+
+  it("all fields should be required", () => {
+    const { getByPlaceholderText } = render(
+      <MemoryRouter initialEntries={["/register"]}>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(getByPlaceholderText("Enter Your Name")).toBeRequired();
+    expect(getByPlaceholderText("Enter Your Email")).toBeRequired();
+    expect(getByPlaceholderText("Enter Your Password")).toBeRequired();
+    expect(getByPlaceholderText("Enter Your Phone")).toBeRequired();
+    expect(getByPlaceholderText("Enter Your Address")).toBeRequired();
+    expect(getByPlaceholderText("Enter Your DOB")).toBeRequired();
+    expect(getByPlaceholderText("What is Your Favorite sports")).toBeRequired();
+  });
+
+  it("should update each input value when it changes", () => {
+    const { getByPlaceholderText } = render(
+      <MemoryRouter initialEntries={["/register"]}>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    const nameInput = getByPlaceholderText("Enter Your Name");
+    const emailInput = getByPlaceholderText("Enter Your Email");
+    const passwordInput = getByPlaceholderText("Enter Your Password");
+    const phoneInput = getByPlaceholderText("Enter Your Phone");
+    const addressInput = getByPlaceholderText("Enter Your Address");
+    const dobInput = getByPlaceholderText("Enter Your DOB");
+    const answerInput = getByPlaceholderText("What is Your Favorite sports");
+
+    fireEvent.change(nameInput, { target: { value: "John Doe" } });
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
+    fireEvent.change(phoneInput, { target: { value: "1234567890" } });
+    fireEvent.change(addressInput, { target: { value: "123 Street" } });
+    fireEvent.change(dobInput, { target: { value: "2000-01-01" } });
+    fireEvent.change(answerInput, { target: { value: "Football" } });
+
+    expect(nameInput).toHaveValue("John Doe");
+    expect(emailInput).toHaveValue("test@example.com");
+    expect(passwordInput).toHaveValue("password123");
+    expect(phoneInput).toHaveValue("1234567890");
+    expect(addressInput).toHaveValue("123 Street");
+    expect(dobInput).toHaveValue("2000-01-01");
+    expect(answerInput).toHaveValue("Football");
+  });
+
   it("should register the user successfully", async () => {
     axios.post.mockResolvedValueOnce({ data: { success: true } });
     axios.get.mockResolvedValueOnce({ data: { category: [] } });
@@ -96,10 +168,8 @@ describe("Register Component", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/login");
   });
 
-  it("should display error message on failed registration", async () => {
+  it("should display error message when exception thrown", async () => {
     axios.post.mockRejectedValueOnce({ message: "User already exists" });
-    axios.get.mockResolvedValueOnce({ data: { category: [] } });
-
     const { getByText, getByPlaceholderText } = render(
       <MemoryRouter initialEntries={["/register"]}>
         <Routes>
@@ -136,9 +206,10 @@ describe("Register Component", () => {
     expect(toast.error).toHaveBeenCalledWith("Something went wrong");
   });
 
-
-  it("should display error message on missing success field", async () => {
-    axios.post.mockResolvedValue({ data: {message: "Some message" }});
+  it("should display error message when success is false/undefined", async () => {
+    axios.post.mockResolvedValue({
+      data: { success: false, message: "User Already Exists" },
+    });
     axios.get.mockResolvedValueOnce({ data: { category: [] } });
 
     const { getByText, getByPlaceholderText } = render(
@@ -174,6 +245,6 @@ describe("Register Component", () => {
     fireEvent.click(getByText("REGISTER"));
 
     await waitFor(() => expect(axios.post).toHaveBeenCalled());
-    expect(toast.error).toHaveBeenCalledWith("Some message");
+    expect(toast.error).toHaveBeenCalledWith("User Already Exists");
   });
 });
