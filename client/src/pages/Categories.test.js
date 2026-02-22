@@ -20,7 +20,7 @@ jest.mock("../context/auth", () => ({
       token: "",
     },
     jest.fn(),
-  ]),
+  ])
 }));
 
 jest.mock("../context/cart", () => ({

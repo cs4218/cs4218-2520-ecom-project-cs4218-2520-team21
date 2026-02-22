@@ -1,3 +1,5 @@
+// Ariella Thirza Callista, A0255876L - Edited (bug fixes)
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Checkbox, Radio } from "antd";
@@ -20,7 +22,7 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  //get all cat
+  // get all cat
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get("/api/v1/category/get-category");
@@ -32,11 +34,22 @@ const HomePage = () => {
     }
   };
 
+  // get total count
+  const getTotal = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/product/product-count");
+      setTotal(data?.total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllCategory();
     getTotal();
   }, []);
-  //get products
+
+  // get products
   const getAllProducts = async () => {
     try {
       setLoading(true);
@@ -49,20 +62,29 @@ const HomePage = () => {
     }
   };
 
-  //getTOtal COunt
-  const getTotal = async () => {
+  useEffect(() => {
+    if (!checked.length || !radio.length) getAllProducts();
+  }, [checked.length, radio.length]);
+
+  //get filtered product
+  const filterProduct = async () => {
     try {
-      const { data } = await axios.get("/api/v1/product/product-count");
-      setTotal(data?.total);
+      const { data } = await axios.post("/api/v1/product/product-filters", {
+        checked,
+        radio,
+      });
+      setProducts(data?.products);
+      // Ariella Thirza Callista, A0255876L - Edited (bug fixes)
+      setTotal(data?.products?.length); // updates total count of products based on filters applied; 
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (page === 1) return;
-    loadMore();
-  }, [page]);
+    if (checked.length || radio.length) filterProduct();
+  }, [checked, radio]);
+
   //load more
   const loadMore = async () => {
     try {
@@ -76,6 +98,11 @@ const HomePage = () => {
     }
   };
 
+  useEffect(() => {
+    if (page === 1) return;
+    loadMore();
+  }, [page]);
+
   // filter by cat
   const handleFilter = (value, id) => {
     let all = [...checked];
@@ -86,31 +113,11 @@ const HomePage = () => {
     }
     setChecked(all);
   };
-  useEffect(() => {
-    if (!checked.length || !radio.length) getAllProducts();
-  }, [checked.length, radio.length]);
 
-  useEffect(() => {
-    if (checked.length || radio.length) filterProduct();
-  }, [checked, radio]);
-
-  //get filterd product
-  const filterProduct = async () => {
-    try {
-      const { data } = await axios.post("/api/v1/product/product-filters", {
-        checked,
-        radio,
-      });
-      setProducts(data?.products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
-    <Layout title={"ALL Products - Best offers "}>
+    <Layout title={"ALL Products - Best offers"}>
       {/* banner image */}
-      <img
-        src="/images/Virtual.png"
+      <img        src="/images/Virtual.png"
         className="banner-img"
         alt="bannerimage"
         width={"100%"}
@@ -118,12 +125,14 @@ const HomePage = () => {
       {/* banner image */}
       <div className="container-fluid row mt-3 home-page">
         <div className="col-md-3 filters">
+          {/* category filter */}
           <h4 className="text-center">Filter By Category</h4>
           <div className="d-flex flex-column">
             {categories?.map((c) => (
               <Checkbox
                 key={c._id}
                 onChange={(e) => handleFilter(e.target.checked, c._id)}
+                checked={checked.includes(c._id)}
               >
                 {c.name}
               </Checkbox>
@@ -143,7 +152,14 @@ const HomePage = () => {
           <div className="d-flex flex-column">
             <button
               className="btn btn-danger"
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                // Ariella Thirza Callista, A0255876L
+                // resets checked and radio 
+                setChecked([]);
+                setRadio([]);
+
+                window.location.reload()
+              }}
             >
               RESET FILTERS
             </button>
@@ -211,7 +227,11 @@ const HomePage = () => {
                 ) : (
                   <>
                     {" "}
-                    Loadmore <AiOutlineReload />
+                    {/* Ariella Thirza Callista, A0255876L - Edited (bug fixes) 
+                      Removed AiOutlineReload icon as it was causing a runtime error 
+                      when trying to filter
+                    */}
+                    Loadmore 
                   </>
                 )}
               </button>
