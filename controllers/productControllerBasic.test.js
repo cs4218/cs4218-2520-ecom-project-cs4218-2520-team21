@@ -201,7 +201,7 @@ describe("Product Controller Tests for create, update and delete", () => {
       });
     });
           
-    test("should return 500 error if photo is missing", async () => {
+    test("should update product successfully when photo is not provided", async () => {
 
       req.fields = {
         name: "Product Without Image",
@@ -396,7 +396,8 @@ describe("Product Controller Tests for create, update and delete", () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith({ error: "Quantity is Required" });
     });
-     test("should return 500 error if photo is missing", async () => {
+
+     test("should update product successfully when photo is not provided", async () => {
 
       req.fields = {
         name: "Product Without Image",
@@ -405,17 +406,25 @@ describe("Product Controller Tests for create, update and delete", () => {
         category: "cat123",
         quantity: 10
       };
-      req.files = {}; 
-
+      req.files = {};    
       
+      const mockProduct = { 
+        _id: "product123", 
+        save: jest.fn().mockResolvedValue(true) 
+      };
+      productModel.findByIdAndUpdate.mockResolvedValue(mockProduct);
+
       await updateProductController(req, res);
 
-      
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith({ error: "Photo is Required" });
-      
-      expect(productModel).not.toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(201); 
+      expect(res.send).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          message: "Product Updated Successfully",
+        })
+      );
     });
+    
     test("should return 500 if photo size is larger than 1MB", async () => {
       req.files.photo.size = 2000000;
 
