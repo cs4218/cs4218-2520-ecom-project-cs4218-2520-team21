@@ -22,7 +22,9 @@ jest.mock("../../components/Layout", () => ({ children, title }) => (
   </div>
 ));
 
-const mockOrders = [
+
+describe("AdminOrders test", () => {
+  const mockOrders = [
   {
     _id: "order123",
     status: "Not Process",
@@ -38,9 +40,8 @@ const mockOrders = [
       },
     ],
   },
-];
+  ];
 
-describe("AdminOrders test", () => {
   beforeEach(() => {
     useAuth.mockReturnValue([{ token: "mock-token" }, jest.fn()]);
     axios.get.mockResolvedValue({ data: mockOrders });
@@ -52,6 +53,7 @@ describe("AdminOrders test", () => {
 
   test("renders AdminOrders and fetches data", async () => {
     render(<AdminOrders />);
+
     expect(screen.getByText("All Orders Data")).toBeInTheDocument();
 
     const buyerName = await screen.findByText("John Doe");
@@ -96,61 +98,94 @@ describe("AdminOrders test", () => {
   });
 
   test("displays 'Success' if payment success is true", async () => {
-  const successOrder = [{ ...mockOrders[0], payment: { success: true } }];
-  axios.get.mockResolvedValue({ data: successOrder });
+    const successOrder = [{ ...mockOrders[0], payment: { success: true } }];
+    axios.get.mockResolvedValue({ data: successOrder });
 
-  render(<AdminOrders />);
+    render(<AdminOrders />);
 
-  await waitFor(() => {
-    expect(screen.getByText("Success")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Success")).toBeInTheDocument();
+    });
   });
-});
 
-test("renders correctly when there are no orders", async () => {
-  axios.get.mockResolvedValue({ data: [] });
-  render(<AdminOrders />);
-  
-  await waitFor(() => {
-   
-    expect(screen.getByText("All Orders")).toBeInTheDocument();
-    expect(screen.queryByText("John Doe")).not.toBeInTheDocument();
+  test("renders correctly when there are no orders", async () => {
+    axios.get.mockResolvedValue({ data: [] });
+
+    render(<AdminOrders />);
+    
+    await waitFor(() => {
+    
+      expect(screen.getByText("All Orders")).toBeInTheDocument();
+      expect(screen.queryByText("John Doe")).not.toBeInTheDocument();
+    });
   });
-});
 
-test("does not fetch orders if auth token is missing", () => {
-  useAuth.mockReturnValue([{}, jest.fn()]); 
-  
-  render(<AdminOrders />);
+  test("does not fetch orders if auth token is missing", () => {
+    useAuth.mockReturnValue([{}, jest.fn()]); 
+    
+    render(<AdminOrders />);
 
-  expect(axios.get).not.toHaveBeenCalled();
-});
-
-test("logs error to console when API call fails", async () => {
-  const consoleSpy = jest.spyOn(console, "log").mockImplementation();
-  axios.get.mockRejectedValue(new Error("Network Error"));
-
-  render(<AdminOrders />);
-
-  await waitFor(() => {
-    expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
+    expect(axios.get).not.toHaveBeenCalled();
   });
-  consoleSpy.mockRestore();
-});
 
-test("handle Change handles errors", async () => {
-  const consoleSpy = jest.spyOn(console, "log").mockImplementation();
-  axios.put.mockRejectedValue(new Error("Update Failed"));
+  test("logs error to console when API call fails", async () => {
+    const consoleSpy = jest.spyOn(console, "log").mockImplementation();
+    axios.get.mockRejectedValue(new Error("Network Error"));
 
-  render(<AdminOrders />);
-  
-  const statusDropdown = await screen.findByText("Not Process");
-  fireEvent.mouseDown(statusDropdown);
-  fireEvent.click(await screen.findByText("Shipped"));
+    render(<AdminOrders />);
 
-  await waitFor(() => {
-    expect(consoleSpy).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
+    });
+    consoleSpy.mockRestore();
   });
-  
-  consoleSpy.mockRestore();
+
+  test("handle Change handles errors", async () => {
+    const consoleSpy = jest.spyOn(console, "log").mockImplementation();
+    axios.put.mockRejectedValue(new Error("Update Failed"));
+
+    render(<AdminOrders />);
+    
+    const statusDropdown = await screen.findByText("Not Process");
+    fireEvent.mouseDown(statusDropdown);
+    fireEvent.click(await screen.findByText("Shipped"));
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalled();
+    });
+    
+    consoleSpy.mockRestore();
+  });
+
+
+  test("truncates product description to 30 characters", async () => {
+    const longDescription = "This is a very long description that definitely exceeds thirty characters to test truncation.";
+    const expectedTruncation = longDescription.substring(0, 30); // "This is a very long descriptio"
+
+    const mockOrdersWithLongDesc = [
+      {
+        _id: "order456",
+        status: "Not Process",
+        buyer: { name: "Jane Doe" },
+        createdAt: new Date().toISOString(),
+        payment: { success: true },
+        products: [
+          {
+            _id: "p2",
+            name: "Long Desc Product",
+            description: longDescription,
+            price: 50,
+          },
+        ],
+      },
+    ];
+
+    axios.get.mockResolvedValueOnce({ data: mockOrdersWithLongDesc });
+
+    render(<AdminOrders />);
+    const truncatedText = await screen.findByText(new RegExp(expectedTruncation, "i"));
+    
+    expect(truncatedText).toBeInTheDocument();
+    expect(screen.queryByText(longDescription)).not.toBeInTheDocument();
 });
 });

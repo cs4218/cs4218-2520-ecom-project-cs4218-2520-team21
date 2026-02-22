@@ -10,7 +10,7 @@ import {
   deleteProductController 
 } from "../controllers/productController.js";
 
-import slugify from "slugify";
+
 jest.mock("fs");
 
 jest.mock("braintree");
@@ -18,12 +18,11 @@ jest.mock("braintree");
 jest.mock("slugify", () => jest.fn((text) => text.toLowerCase().replace(/ /g, "-")));
 
 
-
 jest.mock("../models/productModel.js", () => {
   
   const MockModel = jest.fn().mockImplementation(() => ({
     save: jest.fn().mockResolvedValue(true),
-    photo: {}
+    photo: {data: null, contentType: null}
   }));
 
 
@@ -44,10 +43,11 @@ describe("Product Controller Tests for create, update and delete", () => {
       status: jest.fn().mockReturnThis(),
       send: jest.fn(),
     };
+    fs.readFileSync.mockReturnValue(Buffer.from("mock-data"));
   });
 
   describe("createProductController", () => {
-    test("should create new product", async () => {
+    test("should create new product successfully", async () => {
       req = {
         fields: {
           name: "New Product",
@@ -64,13 +64,37 @@ describe("Product Controller Tests for create, update and delete", () => {
 
       await createProductController(req, res);
 
-      expect(slugify).toHaveBeenCalledWith("New Product");
+      
+      expect(productModel).toHaveBeenCalledWith(
+        expect.objectContaining({
+          slug: "new-product" 
+        })
+      );
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.send).toHaveBeenCalledWith(expect.objectContaining({
         success: true,
         message: "Product Created Successfully",
       }));
     });
+
+    test("should process photo", async () => {
+      req = {
+        fields: {
+            name: "New Product",
+              description: "Cool description",
+              price: 99,
+              category: "cat123",
+              quantity: 10,
+              shipping: "Yes"
+        },
+        files: {
+          photo: { path: "fake/path.jpg", type: "image/jpeg", size: 500000 }
+        }
+      };
+      await createProductController(req, res);
+      expect(fs.readFileSync).toHaveBeenCalledWith("fake/path.jpg");
+  
+});
 
 
     test("should return 500 error if name is missing", async () => {
@@ -88,7 +112,75 @@ describe("Product Controller Tests for create, update and delete", () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith({ error: "Name is Required" });
     });
+
+     test("should return 500 error if desc is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "",
+        price: 99,
+        category: "cat123",
+        quantity: 10
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await createProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Description is Required" });
+    });
+
+    test("should return 500 error if price is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "Description",
+        price: null,
+        category: "cat123",
+        quantity: 10
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await createProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Price is Required" });
+    });
+
+    test("should return 500 error if category is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "Description",
+        price: 10,
+        category: "",
+        quantity: null
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await createProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Category is Required" });
+    });
     
+    test("should return 500 error if quantity is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "Description",
+        price: 10,
+        category: "Cat",
+        
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await createProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Quantity is Required" });
+    });
+
     test("should return 500 error if photo size is greater than 1MB", async () => {
       req.fields = {
         name: "Large Product",
@@ -109,7 +201,7 @@ describe("Product Controller Tests for create, update and delete", () => {
       });
     });
           
-    test("should return 500 error if photo is missing", async () => {
+    test("should update product successfully when photo is not provided", async () => {
 
       req.fields = {
         name: "Product Without Image",
@@ -145,11 +237,10 @@ describe("Product Controller Tests for create, update and delete", () => {
       const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const mockError = new Error("Database connection failed");
       
-      // productModelMock.prototype.save = jest.fn().mockRejectedValue(mockError);
       productModel.mockImplementationOnce(() => ({
-      save: jest.fn().mockRejectedValue(mockError),
-      photo: {} 
-    }));
+        save: jest.fn().mockRejectedValue(mockError),
+        photo: {} 
+      }));
 
       await createProductController(req, res);
 
@@ -166,7 +257,6 @@ describe("Product Controller Tests for create, update and delete", () => {
 
   describe("updateProductController", () => {
     beforeEach(() => {
-  
       req = {
         params: { pid: "12345" },
         fields: {
@@ -184,7 +274,7 @@ describe("Product Controller Tests for create, update and delete", () => {
     
     });
 
-    test("should update product and save photo successfully", async () => {
+    test("should update product successfully", async () => {
    
       const mockProduct = {
         _id: "12345",
@@ -193,7 +283,7 @@ describe("Product Controller Tests for create, update and delete", () => {
       };
 
       productModel.findByIdAndUpdate.mockResolvedValue(mockProduct);
-      fs.readFileSync.mockReturnValue(Buffer.from("fake_image_data"));
+     
 
       await updateProductController(req, res);
 
@@ -203,7 +293,7 @@ describe("Product Controller Tests for create, update and delete", () => {
         expect.objectContaining({ name: "Updated Product" }),
         { new: true }
       );
-      expect(fs.readFileSync).toHaveBeenCalledWith("path/to/photo.jpg");
+    
       expect(mockProduct.save).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.send).toHaveBeenCalledWith(expect.objectContaining({
@@ -212,6 +302,23 @@ describe("Product Controller Tests for create, update and delete", () => {
         products: mockProduct
       }));
     });
+
+     test("should process photo", async () => {
+      const mockProduct = {
+        _id: "12345",
+        photo: { data: null, contentType: null },
+        save: jest.fn().mockResolvedValue(true)
+      };
+
+      productModel.findByIdAndUpdate.mockResolvedValue(mockProduct);
+     
+
+      await updateProductController(req, res);
+
+      expect(fs.readFileSync).toHaveBeenCalledWith("path/to/photo.jpg");
+    
+});
+
 
     test("should return 500 if a required field name is missing", async () => {
       req.fields.name = ""; 
@@ -223,6 +330,101 @@ describe("Product Controller Tests for create, update and delete", () => {
       expect(productModel.findByIdAndUpdate).not.toHaveBeenCalled();
     });
 
+    test("should return 500 error if desc is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "",
+        price: 99,
+        category: "cat123",
+        quantity: 10
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await updateProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Description is Required" });
+    });
+
+    test("should return 500 error if price is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "Description",
+        price: null,
+        category: "cat123",
+        quantity: 10
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await updateProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Price is Required" });
+    });
+
+    test("should return 500 error if category is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "Description",
+        price: 10,
+        category: "",
+        quantity: null
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await updateProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Category is Required" });
+    });
+    
+    test("should return 500 error if quantity is missing", async () => {
+      req = {fields: {
+        name: "New Product",
+        description: "Description",
+        price: 10,
+        category: "Cat",
+      }
+      };
+      req.files = { photo: { size: 500000 } };
+
+      await updateProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({ error: "Quantity is Required" });
+    });
+
+     test("should update product successfully when photo is not provided", async () => {
+
+      req.fields = {
+        name: "Product Without Image",
+        description: "Testing validation",
+        price: 50,
+        category: "cat123",
+        quantity: 10
+      };
+      req.files = {};    
+      
+      const mockProduct = { 
+        _id: "product123", 
+        save: jest.fn().mockResolvedValue(true) 
+      };
+      productModel.findByIdAndUpdate.mockResolvedValue(mockProduct);
+
+      await updateProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(201); 
+      expect(res.send).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          message: "Product Updated Successfully",
+        })
+      );
+    });
+    
     test("should return 500 if photo size is larger than 1MB", async () => {
       req.files.photo.size = 2000000;
 
@@ -281,7 +483,7 @@ describe("Product Controller Tests for create, update and delete", () => {
 
 
       expect(productModel.findByIdAndDelete).toHaveBeenCalledWith("product_id_999");
-      // not sure
+     
       expect(mockQuery.select).toHaveBeenCalledWith("-photo");
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.send).toHaveBeenCalledWith({
@@ -302,6 +504,7 @@ describe("Product Controller Tests for create, update and delete", () => {
         message: "Product not found"
       }));
     });
+
     test("should handle errors and return 500", async () => {
       const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const mockError = new Error("Delete failed");
