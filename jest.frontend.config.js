@@ -24,9 +24,14 @@ export default {
     "<rootDir>/client/src/pages/Auth/*.test.js",
     "<rootDir>/client/src/components/*.test.js",
     "<rootDir>/client/src/components/Form/*.test.js",
+    "<rootDir>/client/src/pages/Auth/*.test.js", 
+    "<rootDir>/client/src/components/*.test.js", 
+    "<rootDir>/client/src/components/Form/*.test.js", 
+    "<rootDir>/client/src/components/Routes/*.test.js",
     "<rootDir>/client/src/pages/admin/*.test.js",
     "<rootDir>/client/src/pages/Auth/*.test.js",
     "<rootDir>/client/src/context/auth.test.js",
+    "<rootDir>/client/src/context/search.test.js",
     "<rootDir>/client/src/pages/About.test.js",
     "<rootDir>/client/src/pages/Pagenotfound.test.js",
     "<rootDir>/client/src/pages/CartPage.test.js",
@@ -36,6 +41,8 @@ export default {
     "<rootDir>/client/src/pages/CategoryProduct.test.js",
     "<rootDir>/client/src/pages/ProductDetails.test.js",
     "<rootDir>/client/src/pages/Categories.test.js",
+    "<rootDir>/client/src/pages/Search.test.js",
+    "<rootDir>/client/src/pages/user/*.test.js",
   ],
 
   // jest code coverage
