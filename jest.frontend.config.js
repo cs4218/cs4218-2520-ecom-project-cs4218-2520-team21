@@ -34,7 +34,7 @@ export default {
     "<rootDir>/client/src/hooks/useCategory.test.js",
     "<rootDir>/client/src/pages/HomePage.test.js",
     "<rootDir>/client/src/pages/CategoryProduct.test.js",
-    "<rootDir>/client/src/pages/ProductDetails.test.js",git 
+    "<rootDir>/client/src/pages/ProductDetails.test.js",
     "<rootDir>/client/src/pages/Categories.test.js",
   ],
 

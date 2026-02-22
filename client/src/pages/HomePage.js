@@ -1,3 +1,5 @@
+// Ariella Thirza Callista, A0255876L - Edited (bug fixes)
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Checkbox, Radio } from "antd";
@@ -72,6 +74,7 @@ const HomePage = () => {
         radio,
       });
       setProducts(data?.products);
+      // Ariella Thirza Callista, A0255876L - Edited (bug fixes)
       setTotal(data?.products?.length); // updates total count of products based on filters applied; 
     } catch (error) {
       console.log(error);
@@ -129,6 +132,7 @@ const HomePage = () => {
               <Checkbox
                 key={c._id}
                 onChange={(e) => handleFilter(e.target.checked, c._id)}
+                checked={checked.includes(c._id)}
               >
                 {c.name}
               </Checkbox>
@@ -148,7 +152,14 @@ const HomePage = () => {
           <div className="d-flex flex-column">
             <button
               className="btn btn-danger"
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                // Ariella Thirza Callista, A0255876L
+                // resets checked and radio 
+                setChecked([]);
+                setRadio([]);
+
+                window.location.reload()
+              }}
             >
               RESET FILTERS
             </button>
@@ -216,7 +227,11 @@ const HomePage = () => {
                 ) : (
                   <>
                     {" "}
-                    Loadmore
+                    {/* Ariella Thirza Callista, A0255876L - Edited (bug fixes) 
+                      Removed AiOutlineReload icon as it was causing a runtime error 
+                      when trying to filter
+                    */}
+                    Loadmore 
                   </>
                 )}
               </button>

@@ -49,7 +49,7 @@ jest.mock("antd", () => {
         data-testid="category-checkbox" 
         onChange={onChange}
         checked={checked}
-        readOnly
+        readOnly={false}
       />
       {children}
     </label>
@@ -161,6 +161,7 @@ describe("Given the HomePage is rendered", () => {
       // Arrange before each test
       mockHomePageWithProducts();
     });
+    
 
     test("Then it renders the Layout wrapper with the correct title", () => {
       // Act

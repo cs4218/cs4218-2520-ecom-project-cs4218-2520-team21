@@ -115,6 +115,7 @@ const ProductDetails = () => {
                   >
                     More Details
                   </button>
+                  {/* Ariella Thirza Callista, A0255876L - Implemented add to cart */}
                   <button
                     className="btn btn-dark ms-1"
                     onClick={() => {

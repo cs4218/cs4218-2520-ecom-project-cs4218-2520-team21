@@ -935,8 +935,7 @@ describe("Given realtedtedProductController", () => {
 
       await realtedProductController(req, res);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      // NOTE: 400 should likely be 500 for database errors
+      expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
         expect.objectContaining({
           success: false,

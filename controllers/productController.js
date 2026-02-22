@@ -89,6 +89,7 @@ export const getProductController = async (req, res) => {
   }
 };
 // get single product
+// Ariella Thirza Callista, A0255876L - bugfix
 export const getSingleProductController = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -126,6 +127,8 @@ export const getSingleProductController = async (req, res) => {
 };
 
 // get photo
+// Ariella Thirza Callista, A0255876L - bugfix
+
 export const productPhotoController = async (req, res) => {
   try {
     if (!req.params?.pid) {
@@ -237,6 +240,7 @@ export const updateProductController = async (req, res) => {
 };
 
 // filters
+// Ariella Thirza Callista, A0255876L - bugfix
 export const productFiltersController = async (req, res) => {
   try {
     if (!req.body) {
@@ -291,6 +295,7 @@ export const productFiltersController = async (req, res) => {
 
 
 // product count
+// Ariella Thirza Callista, A0255876L - bugfix
 export const productCountController = async (req, res) => {
   try {
     const total = await productModel.find({}).estimatedDocumentCount();
@@ -309,6 +314,7 @@ export const productCountController = async (req, res) => {
 };
 
 // product list base on page
+// Ariella Thirza Callista, A0255876L - bugfix
 export const productListController = async (req, res) => {
   try {
     const perPage = 6;
@@ -342,6 +348,7 @@ export const productListController = async (req, res) => {
 };
 
 // search product
+// Ariella Thirz Callista, A0255876L - bugfix
 export const searchProductController = async (req, res) => {
   try {
     const { keyword } = req.params;
@@ -373,6 +380,7 @@ export const searchProductController = async (req, res) => {
 };
 
 // similar products
+// Ariella Thirza Callista, A0255876L - bugfix
 export const realtedProductController = async (req, res) => {
   try {
     const { pid, cid } = req.params;
@@ -398,7 +406,7 @@ export const realtedProductController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       success: false,
       message: "error while geting related product",
       error,
@@ -407,6 +415,7 @@ export const realtedProductController = async (req, res) => {
 };
 
 // get prdocyst by catgory
+// Ariella Thirz Callista, A0255876L - bugfix
 export const productCategoryController = async (req, res) => {
   try {
     const { slug } = req.params;

@@ -1,7 +1,6 @@
 // Ariella Thirza Callista A0255876L
 // AI tools (ChatGPT, Claude) were used to help configure mocks, generate edge cases and identify potential brittleness in tests
 
-import Layout from "./../components/Layout"
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import axios from 'axios';
