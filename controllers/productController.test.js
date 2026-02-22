@@ -9,7 +9,7 @@ import {
   productCountController,
   productListController,
   searchProductController,
-  realtedProductController,
+  relatedProductController,
   productCategoryController,
  } from "./productController.js";
 import productModel from "../models/productModel.js";
@@ -834,8 +834,8 @@ describe("Given searchProductController", () => {
 })
 
 
-// 8. realtedProductController
-describe("Given realtedtedProductController", () => {
+// 8. relatedProductController
+describe("Given relateedProductController", () => {
   const mockProducts = [
     { _id: "p2", name: "Product 2", category: "cat1" },
     { _id: "p3", name: "Product 3", category: "cat1" },
@@ -854,7 +854,7 @@ describe("Given realtedtedProductController", () => {
 
       productModel.find.mockReturnValue(mockChain(mockProducts));
 
-      await realtedProductController(req, res);
+      await relatedProductController(req, res);
 
       expect(productModel.find).toHaveBeenCalledWith({
         category: "cat1",
@@ -877,7 +877,7 @@ describe("Given realtedtedProductController", () => {
 
       productModel.find.mockReturnValue(mockChain([]));
 
-      await realtedProductController(req, res);
+      await relatedProductController(req, res);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.send).toHaveBeenCalledWith(
@@ -896,7 +896,7 @@ describe("Given realtedtedProductController", () => {
 
       productModel.find.mockReturnValue(mockChain(mockProducts));
 
-      await realtedProductController(req, res);
+      await relatedProductController(req, res);
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith(
@@ -912,7 +912,7 @@ describe("Given realtedtedProductController", () => {
 
       productModel.find.mockReturnValue(mockChain(mockProducts));
 
-      await realtedProductController(req, res);
+      await relatedProductController(req, res);
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith(
@@ -933,7 +933,7 @@ describe("Given realtedtedProductController", () => {
         populate: jest.fn().mockRejectedValue(mockError),
       });
 
-      await realtedProductController(req, res);
+      await relatedProductController(req, res);
 
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(

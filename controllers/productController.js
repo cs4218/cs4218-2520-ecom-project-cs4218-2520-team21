@@ -388,7 +388,7 @@ export const searchProductController = async (req, res) => {
 
 // similar products
 // Ariella Thirza Callista, A0255876L - bugfix
-export const realtedProductController = async (req, res) => {
+export const relatedProductController = async (req, res) => {
   try {
     const { pid, cid } = req.params;
 

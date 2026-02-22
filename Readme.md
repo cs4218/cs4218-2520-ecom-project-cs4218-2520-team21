@@ -182,3 +182,19 @@ Each member has completed the unit testing for the following files:
 - pages/About.js
 - pages/Pagenotfound.js
 - config/db.js
+
+### Ariella Thirza Callista
+- pages/ProductDetails.js
+- pages/CategoryProduct.js
+- pages/HomePage.js
+- controllers/ProductController.js
+  - tests can be found in `controllers/productController.test.js`
+    - getProductController
+    - getSingleProductController
+    - productPhotoController
+    - productFiltersController
+    - productListController
+    - productCountController
+    - searchProductController
+    - relatedProductController
+    - productCategoryController
