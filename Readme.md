@@ -160,9 +160,9 @@ Each member has completed the unit testing for the following files:
 - pages/admin/CreateProduct.js
 - pages/admin/AdminOrders.js
 - controllers/categoryController.js 
-   - Only create, update and delete functions: test file is in controllers/categoryControllerBasic.js
+   - Only create, update and delete functions: test file is in controllers/categoryControllerBasic.test.js
 - controllers/productController.js
-   - Only create, update and delete functions:  test file is in controllers/productControllerBasic.js
+   - Only create, update and delete functions:  test file is in controllers/productControllerBasic.test.js
 
 #### Paing Khant Kyaw
 - context/auth.js
