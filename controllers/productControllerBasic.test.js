@@ -218,7 +218,7 @@ describe("Product Controller Tests for create, update and delete", () => {
       expect(res.status).toHaveBeenCalledWith(201);
     });
           
-    test("should update product successfully when photo is not provided", async () => {
+    test("should fail when photo is not provided", async () => {
 
       req.fields = {
         name: "Product Without Image",
