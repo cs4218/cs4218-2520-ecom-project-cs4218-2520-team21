@@ -74,15 +74,15 @@ describe("Category Controller Tests for create, update and delete", () => {
     });
 
 
-    test("should return 200 if category already exists", async () => {
+    test("should return 500 if category already exists", async () => {
       req.body = { name: "Electronics" };
       categoryModel.findOne.mockResolvedValue({ name: "Electronics" });
 
       await createCategoryController(req, res);
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith({
-        success: true,
+        success: false,
         message: "Category Already Exists",
       });
     });

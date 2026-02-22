@@ -190,7 +190,7 @@ describe("Product Controller Tests for create, update and delete", () => {
         quantity: 5
       };
       req.files = {
-        photo: { size: 2000000 } 
+        photo: { size: 1000001}
       };
 
       await createProductController(req, res);
@@ -199,6 +199,23 @@ describe("Product Controller Tests for create, update and delete", () => {
       expect(res.send).toHaveBeenCalledWith({ 
         error: "Photo should be less then 1mb" 
       });
+    });
+
+     test("should be sucessful if photo size is 1MB", async () => {
+      req.fields = {
+        name: "Large Product",
+        description: "Desc",
+        price: 10,
+        category: "cat1",
+        quantity: 5
+      };
+      req.files = {
+        photo: { size: 1000000}
+      };
+
+      await createProductController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(201);
     });
           
     test("should update product successfully when photo is not provided", async () => {
@@ -441,10 +458,10 @@ describe("Product Controller Tests for create, update and delete", () => {
       await updateProductController(req, res);
 
       
-      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.status).toHaveBeenCalledWith(404);
       expect(res.send).toHaveBeenCalledWith(expect.objectContaining({
         success: false,
-        message: "Error in Updte product" 
+        message: "Product does not exist" 
       }));
       logSpy.mockRestore();
     });

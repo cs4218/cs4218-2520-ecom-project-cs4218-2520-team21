@@ -219,6 +219,13 @@ export const updateProductController = async (req, res) => {
       { ...req.fields, slug: slugify(name) },
       { new: true }
     );
+
+    if (!products) {
+      return res.status(404).send({
+        success: false,
+        message: "Product does not exist",
+      });
+}
     if (photo) {
       products.photo.data = fs.readFileSync(photo.path);
       products.photo.contentType = photo.type;
