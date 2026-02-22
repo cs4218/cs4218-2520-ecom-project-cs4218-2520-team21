@@ -33,7 +33,7 @@ const mockProducts = [
     _id: "p1",
     name: "Laptop",
     slug: "laptop",
-    description: "A powerful laoptop",
+    description: "A powerful laptop",
     price: 1499.99
   },
   {
@@ -100,7 +100,7 @@ describe("Given the CategoryProduct page", () => {
       renderCategoryProduct("electronics");
       expect(await screen.findByText("Laptop")).toBeInTheDocument();
       expect(await screen.findByText("$1,499.99")).toBeInTheDocument();
-      expect(await screen.findByText("A powerful laoptop...")).toBeInTheDocument();
+      expect(await screen.findByText("A powerful laptop...")).toBeInTheDocument();
     });
 
     it("Then should render the More Details button for each product", async () => {
@@ -115,9 +115,26 @@ describe("Given the CategoryProduct page", () => {
       expect(mockNavigate).toHaveBeenCalledWith("/product/laptop");
     });
   });
+
+  describe("When it is rendered without a slug", () => {
+    test("Then it should not fetch any products", async () => {
+      render(
+        <MemoryRouter initialEntries={["/category/"]}>
+          <Routes>
+            <Route path="/category/" element={<CategoryProduct />} />
+          </Routes>
+        </MemoryRouter>
+      );
+      await waitFor(() => {
+        expect(axios.get).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe("When the product-category API fails", () => {
+    test("Then the page renders without crashing", async () => {
+      axios.get.mockRejectedValue(new Error("Network error"));
+      expect(() => renderCategoryProduct("electronics")).not.toThrow();
+    });
+  });
 });
-
-  
-
-
-
