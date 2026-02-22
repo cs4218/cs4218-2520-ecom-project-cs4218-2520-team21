@@ -148,3 +148,19 @@ To begin unit testing with Jest in your project, follow these steps:
 ## 6. Continuous Integration (CI)
 Link: https://github.com/cs4218/cs4218-2520-ecom-project-cs4218-2520-team21/actions/runs/21816271963/job/62938494660?pr=1
 The link above is the CI test run for Milestone 1.
+
+## 7. Distribution of Work
+Each member has completed the unit testing for the following files:
+
+#### Dhruvi Ketan Rathod
+- components/AdminMenu.js
+- pages/admin/AdminDashboard.js
+- components/Form/CategoryForm.js
+- pages/admin/CreateCategory.js
+- pages/admin/CreateProduct.js
+- pages/admin/AdminOrders.js
+- controllers/categoryController.js 
+   - Only create, update and delete functions: test file is in controllers/categoryControllerBasic.js
+- controllers/productController.js
+   - Only create, update and delete functions:  test file is in controllers/productControllerBasic.js
+
