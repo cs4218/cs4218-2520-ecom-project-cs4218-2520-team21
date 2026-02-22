@@ -1,5 +1,5 @@
 // Ariella Thirza Callista A0255876L
-// AI tools were used to help configure mocks, generate edge cases and identify potential brittleness in tests
+// AI tools (ChatGPT, Claude) were used to help configure mocks, generate edge cases and identify potential brittleness in tests
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
@@ -352,11 +352,11 @@ describe("Given the categories have been fetched", () => {
       // Arrange
       axios.get.mockImplementation((url) => { // Override default axios.get mocks 
         if (url.includes("get-category"))
-          return Promise.resolve({ data: { success: true, category: [] } });
+          return Promise.resolve({ data: { success: false} });
         if (url.includes("product-count"))
           return Promise.resolve({ data: { total: 0 } });
         if (url.includes("product-list"))
-          return Promise.resolve({ data: { sucess: true, products: [] } });
+          return Promise.resolve({ data: {} });
       })
 
       // Act
@@ -435,6 +435,27 @@ describe("Given a filter is applied", () => {
     })
   });
 });
+
+describe("Given the categories and price options are fetched", () => {
+  describe("When the user applies both category and price filters", () => {
+    test("Then it calls the product-filters API", async () => {
+      renderHomePage();
+      const checkboxes = await screen.findAllByTestId("category-checkbox");
+      const radioOptions = screen.getAllByTestId("price-radio");
+
+      fireEvent.click(checkboxes[0]);
+      fireEvent.click(radioOptions[0]);
+
+      await waitFor(() => {
+        expect(axios.post).toHaveBeenCalledWith(
+          expect.stringContaining("product-filters"),
+          expect.objectContaining({ checked: ["cat1"], radio: [0, 19] })
+        );
+      });
+    });
+  });
+});
+
 
 // 5. Given the products have loaded/been feched
 describe("Given the products have loaded", () => {
