@@ -72,6 +72,7 @@ const HomePage = () => {
         radio,
       });
       setProducts(data?.products);
+      setTotal(data?.products?.length); // updates total count of products based on filters applied; 
     } catch (error) {
       console.log(error);
     }
@@ -113,7 +114,7 @@ const HomePage = () => {
   return (
     <Layout title={"ALL Products - Best offers"}>
       {/* banner image */}
-      <img src="/images/Virtual.png"
+      <img        src="/images/Virtual.png"
         className="banner-img"
         alt="bannerimage"
         width={"100%"}
