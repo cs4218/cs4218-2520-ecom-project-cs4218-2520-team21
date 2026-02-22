@@ -164,3 +164,19 @@ Each member has completed the unit testing for the following files:
 - controllers/productController.js
    - Only create, update and delete functions:  test file is in controllers/productControllerBasic.js
 
+### Ariella Thirza Callista (A0255876L)
+- pages/ProductDetails.js
+- pages/CategoryProduct.js
+- pages/HomePage.js
+- controllers/ProductController.js
+  - tests can be found in `controllers/productController.test.js`
+    - getProductController
+    - getSingleProductController
+    - productPhotoController
+    - productFiltersController
+    - productListController
+    - productCountController
+    - searchProductController
+    - relatedProductController
+    - productCategoryController
+
