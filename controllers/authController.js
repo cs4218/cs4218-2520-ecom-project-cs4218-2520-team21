@@ -180,7 +180,32 @@ export const updateProfileController = async (req, res) => {
     const user = await userModel.findById(req.user._id);
     //password
     if (password && password.length < 6) {
-      return res.json({ error: "Passsword is required and 6 character long" });
+      return res.status(400).send({
+        success: false,
+        message: "Password is required and must be at least 6 characters long",
+      });
+    }
+    // phone validation: when provided, must be non-empty
+    if (phone !== undefined && phone !== null) {
+      const phoneStr = typeof phone === "string" ? phone.trim() : String(phone).trim();
+      if (!phoneStr) {
+        return res.status(400).send({
+          success: false,
+          message: "Phone is required and cannot be empty",
+        });
+      }
+    }
+    // address validation: when provided, must be non-empty (string or object)
+    if (address !== undefined && address !== null) {
+      const isEmpty =
+        (typeof address === "string" && !address.trim()) ||
+        (typeof address === "object" && !Array.isArray(address) && Object.keys(address).length === 0);
+      if (isEmpty) {
+        return res.status(400).send({
+          success: false,
+          message: "Address is required and cannot be empty",
+        });
+      }
     }
     const hashedPassword = password ? await hashPassword(password) : undefined;
     const updatedUser = await userModel.findByIdAndUpdate(
@@ -225,6 +250,22 @@ export const getOrdersController = async (req, res) => {
     });
   }
 };
+
+// get all users (admin only)
+export const getAllUsersController = async (req, res) => {
+  try {
+    const users = await userModel.find({});
+    res.json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while getting users",
+      error,
+    });
+  }
+};
+
 //orders
 export const getAllOrdersController = async (req, res) => {
   try {
@@ -260,6 +301,24 @@ export const orderStatusController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: "Error While Updateing Order",
+      error,
+    });
+  }
+};
+
+// delete account (current user only)
+export const deleteAccountController = async (req, res) => {
+  try {
+    await userModel.findByIdAndDelete(req.user._id);
+    res.status(200).send({
+      success: true,
+      message: "Account deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while deleting account",
       error,
     });
   }
