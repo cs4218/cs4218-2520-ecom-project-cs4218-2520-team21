@@ -23,7 +23,6 @@ Virtual Vault is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) e-co
 ### 1. Installing Node.js
 
 1. **Download and Install Node.js**:
-
    - Visit [nodejs.org](https://nodejs.org) to download and install Node.js.
 
 2. **Verify Installation**:
@@ -36,26 +35,21 @@ Virtual Vault is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) e-co
 ### 2. MongoDB Setup
 
 1. **Download and Install MongoDB Compass**:
-
    - Visit [MongoDB Compass](https://www.mongodb.com/products/tools/compass) and download and install MongoDB Compass for your operating system.
 
 2. **Create a New Cluster**:
-
    - Sign up or log in to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register).
    - After logging in, create a project and within that project deploy a free cluster.
 
 3. **Configure Database Access**:
-
    - Create a new user for your database (if not alredy done so) in MongoDB Atlas.
    - Navigate to "Database Access" under "Security" and create a new user with the appropriate permissions.
 
 4. **Whitelist IP Address**:
-
    - Go to "Network Access" under "Security" and whitelist your IP address to allow access from your machine.
    - For example, you could whitelist 0.0.0.0 to allow access from anywhere for ease of use.
 
 5. **Connect to the Database**:
-
    - In your cluster's page on MongoDB Atlas, click on "Connect" and choose "Compass".
    - Copy the connection string.
 
@@ -67,7 +61,6 @@ Virtual Vault is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) e-co
 To download and use the MERN (MongoDB, Express.js, React.js, Node.js) app from GitHub, follow these general steps:
 
 1. **Clone the Repository**
-
    - Go to the GitHub repository of the MERN app.
    - Click on the "Code" button and copy the URL of the repository.
    - Open your terminal or command prompt.
@@ -78,7 +71,6 @@ To download and use the MERN (MongoDB, Express.js, React.js, Node.js) app from G
    - Navigate into the cloned directory.
 
 2. **Install Frontend and Backend Dependencies**
-
    - Run the following command in your project's root directory:
 
      ```
@@ -86,14 +78,12 @@ To download and use the MERN (MongoDB, Express.js, React.js, Node.js) app from G
      ```
 
 3. **Add database connection string to `.env`**
-
    - Add the connection string copied from MongoDB Atlas to the `.env` file inside the project directory (replace the necessary placeholders):
      ```env
      MONGO_URL = <connection string>
      ```
 
 4. **Adding sample data to database**
-
    - Download “Sample DB Schema” from Canvas and extract it.
    - In MongoDB Compass, create a database named `test` under your cluster.
    - Add four collections to this database: `categories`, `orders`, `products`, and `users`.
@@ -127,7 +117,6 @@ To begin unit testing with Jest in your project, follow these steps:
 3. **Run Tests**  
    Execute your tests using Jest to ensure that your components meet the expected behaviour.  
    You can run the tests by using the following command in the root of the directory:
-
    - **Frontend tests**
 
      ```bash
@@ -146,25 +135,29 @@ To begin unit testing with Jest in your project, follow these steps:
      ```
 
 ## 6. MS1 CI URL
+
 Link: https://github.com/cs4218/cs4218-2520-ecom-project-cs4218-2520-team21/actions/runs/21816271963/job/62938494660?pr=1
 The link above is the CI test run for Milestone 1.
 
 ## 7. Distribution of Work
+
 Each member has completed the unit testing for the following files:
 
 #### Dhruvi Ketan Rathod
+
 - components/AdminMenu.js
 - pages/admin/AdminDashboard.js
 - components/Form/CategoryForm.js
 - pages/admin/CreateCategory.js
 - pages/admin/CreateProduct.js
 - pages/admin/AdminOrders.js
-- controllers/categoryController.js 
-   - Only create, update and delete functions: test file is in controllers/categoryControllerBasic.test.js
+- controllers/categoryController.js
+  - Only create, update and delete functions: test file is in controllers/categoryControllerBasic.test.js
 - controllers/productController.js
-   - Only create, update and delete functions:  test file is in controllers/productControllerBasic.test.js
+  - Only create, update and delete functions: test file is in controllers/productControllerBasic.test.js
 
 #### Paing Khant Kyaw
+
 - context/auth.js
 - helpers/authHelper.js
 - middlewares/authMiddleware.js
@@ -184,6 +177,7 @@ Each member has completed the unit testing for the following files:
 - config/db.js
 
 #### Ariella Thirza Callista
+
 - pages/ProductDetails.js
 - pages/CategoryProduct.js
 - pages/HomePage.js
@@ -200,6 +194,7 @@ Each member has completed the unit testing for the following files:
     - productCategoryController
 
 #### Lim Rui Ting Valencia
+
 - components/Routes/Private.js
 - components/UserMenu.js
 - pages/user/Dashboard.js
@@ -216,3 +211,15 @@ Each member has completed the unit testing for the following files:
 - components/Form/SearchInput.js
 - context/search.js
 - pages/Search.js
+
+#### Xenos Fiorenzo Anong
+
+- pages/Contact.js
+- pages/Policy.js
+- pages/CartPage.js
+- context/cart.js
+- hooks/useCategory.js
+- pages/Categories.js
+- controllers/categoryController.js - my tests are in categoryController.test.js
+  - categoryControlller
+  - singleCategoryController
