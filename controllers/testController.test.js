@@ -1,4 +1,5 @@
 // Paing Khant Kyaw, A0257992J
+import { jest } from '@jest/globals';
 import { testController } from "./authController.js";
 
 describe("testController", () => {
