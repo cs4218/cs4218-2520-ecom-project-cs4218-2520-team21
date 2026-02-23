@@ -34,6 +34,8 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
+jest.mock("braintree");
+
 // 1. getProductController 
 
 describe("Given getProductController", () => {
