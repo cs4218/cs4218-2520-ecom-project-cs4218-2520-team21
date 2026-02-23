@@ -136,7 +136,7 @@ To begin unit testing with Jest in your project, follow these steps:
 
 ## 6. MS1 CI URL
 
-Link: https://github.com/cs4218/cs4218-2520-ecom-project-cs4218-2520-team21/actions/runs/21816271963/job/62938494660?pr=1
+Link: https://github.com/cs4218/cs4218-2520-ecom-project-cs4218-2520-team21/actions/runs/22291437341/job/64479328858
 The link above is the CI test run for Milestone 1.
 
 ## 7. Distribution of Work
