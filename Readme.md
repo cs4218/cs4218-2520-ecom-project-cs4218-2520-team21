@@ -198,3 +198,21 @@ Each member has completed the unit testing for the following files:
     - searchProductController
     - relatedProductController
     - productCategoryController
+
+#### Lim Rui Ting Valencia
+- components/Routes/Private.js
+- components/UserMenu.js
+- pages/user/Dashboard.js
+- models/userModel.js
+- pages/user/Orders.js
+- controllers/authController.js
+  - updateProfileController
+  - getOrdersController
+  - getAllOrdersController
+  - orderStatusController
+  - getAllUsersController (newly added due to bug fix)
+- pages/user/Profile.js
+- pages/admin/Users.js
+- components/Form/SearchInput.js
+- context/search.js
+- pages/Search.js
