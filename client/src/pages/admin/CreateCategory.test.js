@@ -32,7 +32,7 @@ jest.mock("../../components/Form/CategoryForm", () => ({ handleSubmit, value, se
 jest.mock('react-hot-toast');
 
 
-describe("CreateCategory Component", () => {
+describe("CreateCategory test", () => {
   const categoriesMock = [
     { _id: "1", name: "Electronics" },
     { _id: "2", name: "Books" },
@@ -49,10 +49,10 @@ describe("CreateCategory Component", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
+
   test("renders layout, menu, and categories", async () => {
 
     render(<CreateCategory />);
-    
 
     expect(screen.getByText(/Dashboard - Create Category/)).toBeInTheDocument();
     expect(screen.getByText("Mocked AdminMenu")).toBeInTheDocument();
@@ -67,7 +67,6 @@ describe("CreateCategory Component", () => {
   test("typing in Category Form input calls setValue", async () => {
     render(<CreateCategory />);
 
-
     await waitFor(() => {
         expect(screen.getByPlaceholderText("Enter new category")).toBeInTheDocument();
     });
@@ -78,11 +77,9 @@ describe("CreateCategory Component", () => {
     expect(input.value).toBe("Toys");
   });
 
-
-  test("creates a new category", async () => {
+  test("calls create api and shows success toast", async () => {
    
     render(<CreateCategory />);
-   
 
     const input = screen.getByPlaceholderText("Enter new category");
     const submitButton = screen.getByText("Submit");
@@ -95,37 +92,65 @@ describe("CreateCategory Component", () => {
     expect(axios.post).toHaveBeenCalledWith("/api/v1/category/create-category", {
       name: "Clothes",
     });
+  
+    expect(toast.success).toHaveBeenCalledWith("Clothes is created");
+  });
+  
+
+  test("re-fetches and updates the category list after successful creation", async () => {
+
+    axios.get.mockResolvedValueOnce({ data: { success: true, category: categoriesMock } })
+    axios.get.mockResolvedValueOnce({ 
+        data: { 
+          success: true, 
+          category: [...categoriesMock, { _id: "3", name: "New Cat" }] 
+        } 
+      });
+
+    render(<CreateCategory />);
+
+    await waitFor(() => expect(screen.getByText("Electronics")).toBeInTheDocument());
+
+    const input = screen.getByPlaceholderText("Enter new category");
+    fireEvent.change(input, { target: { value: "New Cat" } });
+    fireEvent.click(screen.getByText("Submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("New Cat")).toBeInTheDocument();
+    });
+
+    expect(axios.get).toHaveBeenCalledTimes(2);
   });
 
-  test("opens modal and updates category", async () => {
+  test("calls update api and shows success toast", async () => {
    
     render(<CreateCategory />);
- 
+    const editButtons = await screen.findAllByText("Edit");
+    await act(async () => {
+        fireEvent.click(editButtons[0]);
+    });
 
-    const editButton = await screen.findAllByText("Edit");
+    const modal = await screen.findByRole("dialog"); 
+  
+    const modalInput = within(modal).getByPlaceholderText("Enter new category");
+    const modalSubmit = within(modal).getByText("Submit");
+
+    await act(async () => {
+        fireEvent.change(modalInput, { target: { value: "Gadgets" } });
+        fireEvent.click(modalSubmit);
+      });
+
+    expect(axios.put).toHaveBeenCalledWith(
+      "/api/v1/category/update-category/1", 
+      { name: "Gadgets" }
+    );
     
-    await act(async () => {
-      fireEvent.click(editButton[0]);
-    });
-
-    const modalInput = screen.getAllByPlaceholderText("Enter new category")[1];
-    const modalSubmit = screen.getAllByText("Submit")[1];
-
-    await act(async () => {
-      fireEvent.change(modalInput, { target: { value: "Gadgets" } });
-      fireEvent.click(modalSubmit);
-    });
-
-    expect(axios.put).toHaveBeenCalledWith("/api/v1/category/update-category/1", {
-      name: "Gadgets",
-    });
+    expect(toast.success).toHaveBeenCalledWith("Gadgets is updated");
   });
 
-  test("deletes a category", async () => {
+  test("calls delete api and shows success message", async () => {
    
     render(<CreateCategory />);
-   
-
     const deleteButton = await screen.findAllByText("Delete");
 
     await act(async () => {
@@ -133,9 +158,36 @@ describe("CreateCategory Component", () => {
     });
 
     expect(axios.delete).toHaveBeenCalledWith("/api/v1/category/delete-category/1");
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith("category is deleted");
+     });
   });
 
-  test("shows error toast when creating category fails", async () => {
+  test("removes category from UI after successful deletion", async () => {
+    axios.get.mockResolvedValueOnce({ 
+        data: { success: true, category: [{ _id: "1", name: "Mobile" }, { _id: "2", name: "Laptop" }] } 
+      })
+    axios.get.mockResolvedValue({ 
+        data: { success: true, category: [{ _id: "2", name: "Laptop" }] } 
+      });
+
+    axios.delete.mockResolvedValue({ data: { success: true } });
+
+    render(<CreateCategory />);
+
+    expect(await screen.findByText("Mobile")).toBeInTheDocument();
+    expect(screen.getByText("Laptop")).toBeInTheDocument();
+
+    const deleteButtons = await screen.findAllByText("Delete");
+    fireEvent.click(deleteButtons[0]);
+
+    await waitFor(() => {
+      expect(screen.queryByText("Mobile")).not.toBeInTheDocument();
+    });
+    expect(screen.getByText("Laptop")).toBeInTheDocument();
+  });
+
+  test("shows error toast when create api fails", async () => {
     const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     axios.post.mockRejectedValueOnce(new Error("Network Error"));
 
@@ -151,81 +203,146 @@ describe("CreateCategory Component", () => {
         expect(toast.error).toHaveBeenCalledWith("somthing went wrong in input form");
     });
     logSpy.mockRestore();
-});
+  });
 
-    test("shows error toast when updating category fails", async () => {
-        const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-        
-        axios.put.mockRejectedValueOnce(new Error("Server error"));
-        axios.get.mockResolvedValue({
-            data: { success: true, category: [{ _id: "1", name: "Electronics" }] },
-        });
-
-        render(<CreateCategory />);
-
-
-        const editButton = await screen.findByText("Edit");
-        fireEvent.click(editButton);
-
-
-        const modal = screen.getByRole("dialog"); // get modal container
-        const modalInput = within(modal).getByDisplayValue("Electronics");
-        const modalSubmit = within(modal).getByText("Submit");
-
-
-        fireEvent.change(modalInput, { target: { value: "Gadgets" } });
-        fireEvent.click(modalSubmit);
-
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith("Somtihing went wrong");
-        });
-
-        logSpy.mockRestore();
-    });
-
-    test("shows error toast when deleting category fails", async () => {
-        const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-        axios.get.mockResolvedValue({ data: { success: true, category: [{ _id: "1", name: "Electronics" }] } });
-        axios.delete.mockRejectedValueOnce(new Error("Server error"));
-
-        render(<CreateCategory />);
-
-        const deleteButton = await screen.findByText("Delete");
-        fireEvent.click(deleteButton);
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith("Somtihing went wrong");
-        });
-        logSpy.mockRestore();
-});
-    test("shows toast.error when creating category fails", async () => {
+  test("shows error toast when update api fails", async () => {
+    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     
-        axios.post.mockResolvedValueOnce({ data: { success: false, message: "Category already exists" } });
-
-        render(<CreateCategory />);
-
-        const input = screen.getByPlaceholderText("Enter new category");
-        const submit = screen.getByText("Submit");
-
-        fireEvent.change(input, { target: { value: "Electronics" } });
-        fireEvent.click(submit);
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith("Category already exists");
-        });
+    axios.put.mockRejectedValueOnce(new Error("Server error"));
+    axios.get.mockResolvedValue({
+        data: { success: true, category: [{ _id: "1", name: "Electronics" }] },
     });
-    test("shows toast.error when fetching categories fails", async () => {
-        const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-        axios.get.mockRejectedValueOnce(new Error("Network Error"));
 
-        render(<CreateCategory />);
+    render(<CreateCategory />);
 
-        
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith("Something wwent wrong in getting catgeory");
-        });
-        logSpy.mockRestore();
-        });
+    const editButton = await screen.findByText("Edit");
+    fireEvent.click(editButton);
 
+    const modal = screen.getByRole("dialog"); // get modal container
+    const modalInput = within(modal).getByDisplayValue("Electronics");
+    const modalSubmit = within(modal).getByText("Submit");
+
+    fireEvent.change(modalInput, { target: { value: "Gadgets" } });
+    fireEvent.click(modalSubmit);
+
+    await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith("Somtihing went wrong");
+    });
+
+    logSpy.mockRestore();
+  });
+
+  test("shows error toast when delete api fails", async () => {
+    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+    axios.get.mockResolvedValue({ data: { success: true, category: [{ _id: "1", name: "Electronics" }] } });
+    axios.delete.mockRejectedValueOnce(new Error("Server error"));
+
+    render(<CreateCategory />);
+
+    const deleteButton = await screen.findByText("Delete");
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith("Somtihing went wrong");
+    });
+    logSpy.mockRestore();
 });
+
+  test("shows toast.error when creating category fails", async () => {
+  
+    axios.post.mockResolvedValueOnce({ data: { success: false, message: "Category already exists" } });
+
+    render(<CreateCategory />);
+
+    const input = screen.getByPlaceholderText("Enter new category");
+    const submit = screen.getByText("Submit");
+
+    fireEvent.change(input, { target: { value: "Electronics" } });
+    fireEvent.click(submit);
+
+    await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith("Category already exists");
+    });
+  });
+  test("shows toast.error when fetching categories fails", async () => {
+    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+    axios.get.mockRejectedValueOnce(new Error("Network Error"));
+
+    render(<CreateCategory />);
+
+    
+    await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith("Something wwent wrong in getting catgeory");
+    });
+    logSpy.mockRestore();
+  });
+
+  test("shows error toast when category update fails on the server", async () => {
+  
+    axios.put.mockResolvedValue({
+      data: {
+        success: false,
+        message: "Category name already exists", 
+      },
+    });
+
+    render(<CreateCategory />);
+
+   
+    const editButtons = await screen.findAllByText("Edit");
+    fireEvent.click(editButtons[0]);
+
+  
+    const modal = await screen.findByRole("dialog");
+    const modalInput = within(modal).getByPlaceholderText("Enter new category");
+    const modalSubmit = within(modal).getByText("Submit");
+
+    fireEvent.change(modalInput, { target: { value: "Existing Category" } });
+    fireEvent.click(modalSubmit);
+
+  
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith("Category name already exists");
+    });
+
+    expect(modal).toBeInTheDocument();
+    });
+
+  test("shows error toast when delete fails on the server", async () => {
+    axios.delete.mockResolvedValue({
+      data: {
+        success: false,
+        message: "Cannot delete: Category has linked products",
+      },
+    });
+
+    render(<CreateCategory />);
+
+    
+    const deleteButtons = await screen.findAllByText("Delete");
+    fireEvent.click(deleteButtons[0]);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith("Cannot delete: Category has linked products");
+    });
+    
+    expect(axios.get).toHaveBeenCalledTimes(1);
+  });
+
+
+  test("closes the modal when cancel is clicked", async () => {
+    render(<CreateCategory />);
+
+    const editButtons = await screen.findAllByText("Edit");
+    fireEvent.click(editButtons[0]);
+
+    const modal = screen.getByRole("dialog");
+    expect(modal).toBeInTheDocument();
+    const closeButton = screen.getByLabelChecked ? screen.getByLabelText("Close") : document.querySelector('.ant-modal-close');
+    
+    fireEvent.click(closeButton);
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+  });
+  });

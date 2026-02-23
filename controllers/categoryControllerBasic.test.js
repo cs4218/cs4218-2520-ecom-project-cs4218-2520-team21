@@ -10,7 +10,6 @@ import {
   deleteCategoryCOntroller 
 } from "../controllers/categoryController.js";
 
-
 jest.mock("slugify", () => jest.fn((text) => text.toLowerCase().replace(/ /g, "-")));
 
 jest.mock("../models/categoryModel.js", () => {
@@ -44,11 +43,17 @@ describe("Category Controller Tests for create, update and delete", () => {
       
       categoryModel.findOne.mockResolvedValue(null);
    
-      const mockSavedCategory = { name: "Books", slug: "books" };
+      const mockSavedCategory = { name: "Books"};
       categoryModel.prototype.save = jest.fn().mockResolvedValue(mockSavedCategory);
 
       await createCategoryController(req, res);
+      
 
+      expect(categoryModel).toHaveBeenCalledWith(
+        expect.objectContaining({
+          slug: "books" 
+        })
+      );
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.send).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -69,15 +74,15 @@ describe("Category Controller Tests for create, update and delete", () => {
     });
 
 
-    test("should return 200 if category already exists", async () => {
+    test("should return 500 if category already exists", async () => {
       req.body = { name: "Electronics" };
       categoryModel.findOne.mockResolvedValue({ name: "Electronics" });
 
       await createCategoryController(req, res);
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith({
-        success: true,
+        success: false,
         message: "Category Already Exists",
       });
     });
@@ -107,30 +112,30 @@ describe("Category Controller Tests for create, update and delete", () => {
   });
 
     describe("updateCategoryController", () => {
-    test("should update category successfully", async () => {
-    req.body = { name: "Updated" };
-    req.params = { id: "123" };
+      test("should update category successfully", async () => {
+        req.body = { name: "Updated" };
+        req.params = { id: "123" };
 
-    const updatedCategory = { _id: "123", name: "Updated" };
-    categoryModel.findByIdAndUpdate.mockResolvedValue(updatedCategory);
+        const updatedCategory = { _id: "123", name: "Updated" };
+        categoryModel.findByIdAndUpdate.mockResolvedValue(updatedCategory);
 
-    await updateCategoryController(req, res);
+        await updateCategoryController(req, res);
 
-    
-    expect(categoryModel.findByIdAndUpdate).toHaveBeenCalledWith(
-      "123",
-      { name: "Updated", slug: "updated" },
-      { new: true }
-    );
+        
+        expect(categoryModel.findByIdAndUpdate).toHaveBeenCalledWith(
+          "123",
+          { name: "Updated", slug: "updated" },
+          { new: true }
+        );
 
 
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.send).toHaveBeenCalledWith({
-      success: true,
-      message: "Category Updated Successfully",
-      category: updatedCategory,
-    });
-  });
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.send).toHaveBeenCalledWith({
+          success: true,
+          message: "Category Updated Successfully",
+          category: updatedCategory,
+        });
+      });
   
     test("category does not exist and thus cannot be updated returning 404 error", async () => {
      
@@ -143,15 +148,14 @@ describe("Category Controller Tests for create, update and delete", () => {
       expect(res.status).toHaveBeenCalledWith(404);
       
       expect(res.send).toHaveBeenCalledWith(
-            expect.objectContaining({
-              success: false,
-              message: "Category not found",
-            })
+          expect.objectContaining({
+            success: false,
+            message: "Category not found",
+          })
         );
      
     });
     
-
     test("should return 500 if there is a database error", async () => {
       req.body = { name: "Updated" };
       req.params = { id: "123" };

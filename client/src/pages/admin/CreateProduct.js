@@ -46,6 +46,7 @@ const CreateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("shipping", shipping);
       const { data } = await axios.post(
         "/api/v1/product/create-product",
         productData
@@ -58,7 +59,8 @@ const CreateProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("something went wrong");
+      const message = error.response?.data?.error  || "something went wrong";
+      toast.error(message);
     }
   };
 
