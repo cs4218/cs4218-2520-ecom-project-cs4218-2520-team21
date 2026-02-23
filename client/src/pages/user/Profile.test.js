@@ -2,6 +2,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { MemoryRouter } from 'react-router-dom';
 import Profile from './Profile';
 import axios from 'axios';
 
@@ -37,7 +38,7 @@ describe('Profile page', () => {
   test('renders profile info', () => {
     // Arrange
     // Act
-    render(<Profile />);
+    render(<MemoryRouter><Profile /></MemoryRouter>);
     // Assert
     expect(screen.getByDisplayValue('Jane')).toBeInTheDocument();
     expect(screen.getByDisplayValue('jane@example.com')).toBeInTheDocument();
@@ -49,7 +50,7 @@ describe('Profile page', () => {
     // Arrange
     authState.user = null;
     // Act
-    render(<Profile />);
+    render(<MemoryRouter><Profile /></MemoryRouter>);
     // Assert
     expect(screen.getByText('No profile')).toBeInTheDocument();
   });
@@ -66,7 +67,7 @@ describe('Profile page', () => {
         },
       },
     });
-    render(<Profile />);
+    render(<MemoryRouter><Profile /></MemoryRouter>);
     // Act
     fireEvent.click(screen.getByRole('button', { name: /UPDATE/i }));
     // Assert
@@ -75,7 +76,7 @@ describe('Profile page', () => {
 
   test('delete account flow shows confirmation', () => {
     // Arrange
-    render(<Profile />);
+    render(<MemoryRouter><Profile /></MemoryRouter>);
     const deleteButton = screen.getByRole('button', { name: /Delete Account/i });
     // Act
     fireEvent.click(deleteButton);
@@ -86,7 +87,7 @@ describe('Profile page', () => {
   test('handles axios error gracefully', async () => {
     // Arrange
     axios.put.mockRejectedValue(new Error('fail'));
-    render(<Profile />);
+    render(<MemoryRouter><Profile /></MemoryRouter>);
     // Act
     fireEvent.click(screen.getByRole('button', { name: /UPDATE/i }));
     await screen.findByRole('button', { name: /UPDATE/i });
@@ -96,7 +97,7 @@ describe('Profile page', () => {
 
   test('cancel closes confirmation modal', () => {
     // Arrange
-    render(<Profile />);
+    render(<MemoryRouter><Profile /></MemoryRouter>);
     fireEvent.click(screen.getByRole('button', { name: /Delete Account/i }));
     expect(screen.getByText(/Are you sure/i)).toBeInTheDocument();
     // Act

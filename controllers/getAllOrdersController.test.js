@@ -1,6 +1,4 @@
 // Lim Rui Ting Valencia, A0255150N
-import { jest } from '@jest/globals';
-
 const mockSort = jest.fn().mockResolvedValue([]);
 const chain = {
   populate: jest.fn(function () { return chain; }),
@@ -8,16 +6,17 @@ const chain = {
 };
 const mockFind = jest.fn(() => chain);
 
-await jest.unstable_mockModule('../models/orderModel.js', () => ({
-  default: { find: mockFind },
+jest.mock('../models/orderModel', () => ({
+  __esModule: true,
+  default: { find: jest.fn() },
 }));
-await jest.unstable_mockModule('../models/userModel.js', () => ({ default: {} }));
-jest.resetModules();
-const authController = await import('./authController.js');
-const { getAllOrdersController } = authController;
+jest.mock('../models/userModel', () => ({ __esModule: true, default: {} }));
+
+const { getAllOrdersController } = require('./authController');
 
 describe('getAllOrdersController', () => {
   let req, res;
+  const orderModel = require('../models/orderModel').default;
   beforeEach(() => {
     req = {};
     res = { json: jest.fn(), send: jest.fn() };
@@ -25,35 +24,27 @@ describe('getAllOrdersController', () => {
     mockSort.mockResolvedValue([]);
     jest.clearAllMocks();
     res.status = jest.fn(() => res);
+    orderModel.find.mockReturnValue(chain);
   });
 
   test('returns all orders', async () => {
-    // Arrange
     const orders = [{ id: 'o1' }, { id: 'o2' }];
     mockSort.mockResolvedValue(orders);
-    // Act
     await getAllOrdersController(req, res);
-    // Assert
-    expect(mockFind).toHaveBeenCalledWith({});
+    expect(orderModel.find).toHaveBeenCalledWith({});
     expect(res.json).toHaveBeenCalledWith(orders);
   });
 
   test('returns empty array when no orders', async () => {
-    // Arrange
     mockSort.mockResolvedValue([]);
-    // Act
     await getAllOrdersController(req, res);
-    // Assert
-    expect(mockFind).toHaveBeenCalledWith({});
+    expect(orderModel.find).toHaveBeenCalledWith({});
     expect(res.json).toHaveBeenCalledWith([]);
   });
 
   test('handles exception', async () => {
-    // Arrange
     mockSort.mockRejectedValue(new Error('fail'));
-    // Act
     await getAllOrdersController(req, res);
-    // Assert
     expect(res.status).toHaveBeenCalledWith(500);
   });
 });
