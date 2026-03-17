@@ -6,13 +6,13 @@ test.describe.configure({ mode: "parallel" });
 test.beforeEach(async ({page, request}) => {
   const url = "http://localhost:3000//api/v1/auth/register";
   const req = {
-    name: "scene9",
-    email: "scene9@gmail.com",
-    password: "scene9password",
+    name: "scene7",
+    email: "scene7@gmail.com",
+    password: "scene7password",
     phone: "11111111",
     address: "nus",
-    answer: "scene9",
-    DOB: "10-10-2000"
+    answer: "scene7",
+    dob: "10-10-2000"
   };
   const response = await request.post(url, {
     headers: {
