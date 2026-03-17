@@ -5,3 +5,8 @@ node_modules
 /playwright/.cache/
 .env
 coverage/lcov-report
+
+# Playwright
+/playwright/.auth/
+
+coverage
