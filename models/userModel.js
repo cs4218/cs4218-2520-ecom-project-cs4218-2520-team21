@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema(
       type: {},
       required: true,
     },
+    DOB: {
+      type: String,
+      required: true,
+      default: ""
+    },
     answer: {
       type: String,
       required: true,
