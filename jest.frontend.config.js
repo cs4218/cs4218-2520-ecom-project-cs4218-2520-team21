@@ -35,6 +35,7 @@ export default {
     "<rootDir>/client/src/pages/About.test.js",
     "<rootDir>/client/src/pages/Pagenotfound.test.js",
     "<rootDir>/client/src/pages/CartPage.test.js",
+    "<rootDir>/client/src/pages/CartPage.integration.test.js",
     "<rootDir>/client/src/pages/Contact.test.js",
     "<rootDir>/client/src/pages/Policy.test.js",
     "<rootDir>/client/src/context/cart.test.js",
