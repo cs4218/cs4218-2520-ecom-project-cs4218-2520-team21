@@ -15,7 +15,7 @@ const USER = {
 };
 
 const FILTER = {
-  category: 'Electronics',
+  category: 'Clothing',
   priceTestId: 'price-$0 to 19',   // matches data-testid={`price-${p.name}`} in HomePage
   priceMin: 0,
   priceMax: 19
@@ -114,7 +114,7 @@ test.describe('Filter by category', () => {
 
     await checkHomePageLoaded(page);
     const after = await page.getByTestId('product-card').count();
-    expect(after).toBeGreaterThanOrEqual(before);
+    expect(after).toEqual(before);
   });
 });
 
@@ -140,13 +140,10 @@ test.describe('Filter by price', () => {
     // Prices are rendered inside each product card — parse from card text
     const cards = page.getByTestId('product-card');
     const count = await cards.count();
-    // Wait until all filtered cards have a visible .card-price
-    for (let i = 0; i < await cards.count(); i++) {
-      await expect(cards.nth(i).locator('.card-price')).toBeVisible();
-    }
-
+    
     for (let i = 0; i < count; i++) {
-      const priceText = await cards.nth(i).locator('.card-price').textContent();
+      // h5 with both card-title and card-price classes
+      const priceText = await cards.nth(i).locator('h5').filter({ hasText: '$' }).textContent();
       const price = parseFloat(priceText!.replace(/[^0-9.]/g, ''));
       expect(price).toBeGreaterThanOrEqual(FILTER.priceMin);
       expect(price).toBeLessThanOrEqual(FILTER.priceMax);
@@ -165,7 +162,68 @@ test.describe('Filter by price', () => {
 
     await checkHomePageLoaded(page);
     const after = await page.getByTestId('product-card').count();
-    expect(after).toBeGreaterThanOrEqual(before);
+    expect(after).toEqual(before);
+  });
+});
+
+// Combined Filters 
+test.describe('Combined category and price filters', () => {
+  test.beforeEach(async ({ page }) => {
+    await loginAsUser(page);
+    await checkHomePageLoaded(page);
+  });
+
+  test('should narrow results further when both filters are applied', async ({ page }) => {
+    await applyCategoryFilter(page, FILTER.category);
+    const afterCategory = await page.getByTestId('product-card').count();
+
+    await applyPriceFilter(page, FILTER.priceTestId);
+    const afterBoth = await page.getByTestId('product-card').count();
+
+    expect(afterBoth).toBeLessThanOrEqual(afterCategory);
+  });
+
+  test('should show products satisfying both category and price constraints', async ({ page }) => {
+    await applyCategoryFilter(page, FILTER.category);
+    await applyPriceFilter(page, FILTER.priceTestId);
+
+    const cards = page.getByTestId('product-card');
+    const count = await cards.count();
+
+    // Wait until all filtered cards have a visible .card-price
+    for (let i = 0; i < await cards.count(); i++) {
+      await expect(cards.nth(i).locator('.card-price')).toBeVisible();
+    }
+
+    for (let i = 0; i < count; i++) {
+      // Verify price on card
+      const priceText = await cards.nth(i).locator('.card-price').textContent();
+      const price = parseFloat(priceText!.replace(/[^0-9.]/g, ''));
+      expect(price).toBeGreaterThanOrEqual(FILTER.priceMin);
+      expect(price).toBeLessThanOrEqual(FILTER.priceMax);
+
+      // Verify category by navigating into PDP and back
+      await cards.nth(i).getByRole('button', { name: 'More Details' }).click();
+      await expect(page.getByText(`Category : ${FILTER.category}`)).toBeVisible();
+      await page.goBack();
+      await checkHomePageLoaded(page);
+    }
+  });
+
+  test('should reset to all products when RESET FILTERS is clicked', async ({ page }) => {
+    const before = await page.getByTestId('product-card').count();
+
+    await applyCategoryFilter(page, FILTER.category);
+    await applyPriceFilter(page, FILTER.priceTestId);
+
+    await Promise.all([
+      page.waitForNavigation(),
+      page.getByRole('button', { name: 'RESET FILTERS' }).click(),
+    ]);
+
+    await checkHomePageLoaded(page);
+    const after = await page.getByTestId('product-card').count();
+    expect(after).toEqual(before);
   });
 });
 
@@ -175,6 +233,7 @@ async function loginAsUser(page: Page) {
   await page.getByPlaceholder('Enter Your Email').fill(USER.email);
   await page.getByPlaceholder('Enter Your Password').fill(USER.password);
   await page.getByRole('button', { name: 'LOGIN' }).click();
+  await page.waitForURL(`${BASE_URL}`);
 }
 
 async function applyCategoryFilter(page: Page, categoryName: string) {
