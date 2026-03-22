@@ -141,7 +141,7 @@ The link above is the CI test run for Milestone 1.
 
 ## 7. Distribution of Work
 
-Each member has completed the unit testing for the following files:
+Each member has completed the testing for the following files:
 
 #### Dhruvi Ketan Rathod
 
@@ -223,3 +223,10 @@ Each member has completed the unit testing for the following files:
 - controllers/categoryController.js - my tests are in categoryController.test.js
   - categoryControlller
   - singleCategoryController
+- e2e test scenarios
+  - scenario 1: "user registers, user logs in, user adds product to cart, user pays, user checks order"
+  - scenario 5: "user logs in, user adds multiple products to cart, user removes a product, user pays, user checks order"
+  - scenario 12: "user registers, user logs in, user adds product to cart, user checks cart, user updates address"
+- integration tests
+  - cart page <-> cart context, auth context, search context
+  - category page <-> useCategory hook
