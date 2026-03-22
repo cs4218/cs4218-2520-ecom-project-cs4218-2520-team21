@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 // @ts-check
 import { test, expect } from "@playwright/test";
 
@@ -53,5 +54,5 @@ test("User login and delete profile", async ({ page }) => {
     .getByRole("textbox", { name: "Enter Your Password" })
     .fill("scene9password");
   await page.getByRole("button", { name: "LOGIN" }).click();
-  await expect(page.getByText("Something went wrong")).toBeVisible();
+  await expect(page.getByText("Email is not registered")).toBeVisible();
 });

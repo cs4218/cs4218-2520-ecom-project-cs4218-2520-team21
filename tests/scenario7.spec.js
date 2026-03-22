@@ -1,3 +1,4 @@
+// Paing Khant Kyaw, A0257992J
 // @ts-check
 import { test, expect } from "@playwright/test";
 
@@ -12,7 +13,7 @@ test.beforeEach(async ({ page, request }) => {
     phone: "11111111",
     address: "nus",
     answer: "scene7",
-    dob: "10-10-2000",
+    DOB: "10-10-2000",
   };
   const response = await request.post(url, {
     headers: {
