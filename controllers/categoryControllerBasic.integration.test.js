@@ -1,3 +1,6 @@
+//  Dhruvi Ketan Rathod A0259297J
+// Test structures and mock configurations were developed with the assistance of AI
+
 import request from "supertest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
@@ -81,7 +84,7 @@ describe("Update Category Integration Tests with categoryModel", () => {
 
     const response = await request(app)
       .put(`/api/v1/category/update-category/${fakeId}`)
-      .send({ name: "Doesnt Matter" });
+      .send({ name: "Does not Matter" });
 
     expect(response.status).toBe(404);
     expect(response.body.success).toBe(false);
@@ -122,6 +125,7 @@ describe("Delete Category Integration Tests with categoryModel", () => {
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe("Category not found");
   });
+  
   test("should return 500 if the ID format is invalid ", async () => {
     const res = await request(app).delete("/api/v1/category/delete-category/invalid-id-123");
 

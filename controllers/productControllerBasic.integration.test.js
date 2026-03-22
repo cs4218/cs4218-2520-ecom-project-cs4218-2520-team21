@@ -1,3 +1,6 @@
+//  Dhruvi Ketan Rathod A0259297J
+// Test structures and mock configurations were developed with the assistance of AI
+
 import express from "express";
 import formidable from "express-formidable"; 
 import { 
@@ -14,7 +17,6 @@ import path from "path";
 import fs from "fs";
 
 const app = express();
-
 
 app.post(
   "/api/v1/product/create-product", 
@@ -88,10 +90,9 @@ describe("Create Product Controller Integration Tests", () => {
     expect(res.status).toBe(500);
     expect(res.body.error).toBe("Photo is Required");
   });
+
   test("should return 500 if photo is larger than 1MB", async () => {
-    const bigBuffer = Buffer.alloc(1.1 * 1024 * 1024); // 1.1MB of zeros
-    const largeFilePath = path.resolve("large-test-img.txt");
-    fs.writeFileSync(largeFilePath, bigBuffer);
+    const bigBuffer = Buffer.alloc(1000001); 
 
     const res = await request(app)
       .post("/api/v1/product/create-product")
@@ -104,24 +105,24 @@ describe("Create Product Controller Integration Tests", () => {
 
     expect(res.status).toBe(500);
     expect(res.body.error).toBe("Photo should be less then 1mb");
-    fs.unlinkSync(largeFilePath);
+
   });
 
   test("should return 500 and trigger the catch block on database error", async () => {
-  const res = await request(app)
-    .post("/api/v1/product/create-product")
-    .field("name", "Error Trigger Product")
-    .field("description", "Testing the catch block")
-    .field("price", "100")
-    .field("category", "not-a-valid-mongodb-id") 
-    .field("quantity", "10")
-    .attach("photo", "tests/assets/adidas.png");
+    const res = await request(app)
+      .post("/api/v1/product/create-product")
+      .field("name", "Error Trigger Product")
+      .field("description", "Testing the catch block")
+      .field("price", "100")
+      .field("category", "not-a-valid-mongodb-id") 
+      .field("quantity", "10")
+      .attach("photo", "tests/assets/adidas.png");
 
-  expect(res.status).toBe(500);
-  expect(res.body.success).toBe(false);
-  expect(res.body.message).toBe("Error in crearing product");
-  expect(res.body.error).toBeDefined(); 
-});
+    expect(res.status).toBe(500);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe("Error in crearing product");
+    expect(res.body.error).toBeDefined(); 
+  });
 
 });
 
@@ -153,20 +154,21 @@ describe("Update Product Controller Integration Tests", () => {
     expect(res.body.products.name).toBe("New Phone");
   
     const updated = await productModel.findById(initialProduct._id);
+    expect(updated.name).toBe("New Phone");
     expect(updated.slug).toBe("New-Phone");
   });
 
   test("should return 500 if name is missing during update", async () => {
-  const res = await request(app)
-    .put("/api/v1/product/update-product/some-id")
-    .field("description", "Updating without a name")
-    .field("price", "100")
-    .field("category", new mongoose.Types.ObjectId().toString())
-    .field("quantity", "10");
+    const res = await request(app)
+      .put("/api/v1/product/update-product/some-id")
+      .field("description", "Updating without a name")
+      .field("price", "100")
+      .field("category", new mongoose.Types.ObjectId().toString())
+      .field("quantity", "10");
 
-  expect(res.status).toBe(500);
-  expect(res.body.error).toBe("Name is Required");
-});
+    expect(res.status).toBe(500);
+    expect(res.body.error).toBe("Name is Required");
+  });
 
   test("should return 404 if the product ID does not exist", async () => {
     const fakeId = new mongoose.Types.ObjectId();
@@ -199,7 +201,7 @@ describe("Update Product Controller Integration Tests", () => {
   }).save();
 
 
-  const largeBuffer = Buffer.alloc(1.1 * 1024 * 1024);
+  const largeBuffer = Buffer.alloc(1000001);
 
   const res = await request(app)
     .put(`/api/v1/product/update-product/${product._id}`)
