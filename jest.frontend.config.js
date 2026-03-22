@@ -48,6 +48,7 @@ export default {
   ],
 
   // jest code coverage
+  coverageDirectory: "coverage/frontend",
   collectCoverage: true,
   collectCoverageFrom: [
     "client/src/pages/Auth/**",
