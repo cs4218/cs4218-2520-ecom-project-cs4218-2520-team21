@@ -8,7 +8,7 @@ test.use({
 });
 
 export const randomEmail = () =>
-  `testscenario1-${(Math.random() + 1).toString(36).substring(7)}@example.com`;
+  `testscenario12-${(Math.random() + 1).toString(36).substring(7)}@example.com`;
 
 test("user registers, user logs in, user adds product to cart, user checks cart, user updates address", async ({
   page,
