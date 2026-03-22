@@ -136,7 +136,7 @@ describe("Test Workflow: CreateCategory -> CreateProduct", () => {
             content === "Gaming";
     });
 
-    option.click();
+    await act(async () => option.click());
     const nameInput = screen.getByPlaceholderText("write a name");
     const descInput = screen.getByPlaceholderText("write a description");
     const priceInput = screen.getByPlaceholderText("write a Price");

@@ -12,6 +12,7 @@ import {
   deleteCategoryCOntroller 
 } from "../controllers/categoryController.js";
 
+jest.mock("braintree");
 const app = express();
 app.use(express.json());
 app.post("/api/v1/category/create-category", createCategoryController);
@@ -125,7 +126,7 @@ describe("Delete Category Integration Tests with categoryModel", () => {
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe("Category not found");
   });
-  
+
   test("should return 500 if the ID format is invalid ", async () => {
     const res = await request(app).delete("/api/v1/category/delete-category/invalid-id-123");
 

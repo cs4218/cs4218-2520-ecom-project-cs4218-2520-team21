@@ -13,8 +13,9 @@ import request from "supertest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import productModel from "../models/productModel.js";
-import path from "path";
-import fs from "fs";
+
+
+jest.mock("braintree");
 
 const app = express();
 
