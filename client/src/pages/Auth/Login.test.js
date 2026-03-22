@@ -154,7 +154,13 @@ describe("Login Component", () => {
   });
 
   it("should display error message on failed login", async () => {
-    axios.post.mockRejectedValueOnce({ message: "Invalid credentials" });
+    axios.post.mockRejectedValueOnce({
+      response: {
+        data: {
+          message: "some message",
+        },
+      },
+    });
 
     const { getByPlaceholderText, getByText } = render(
       <MemoryRouter initialEntries={["/login"]}>
@@ -173,11 +179,13 @@ describe("Login Component", () => {
     fireEvent.click(getByText("LOGIN"));
 
     await waitFor(() => expect(axios.post).toHaveBeenCalled());
-    expect(toast.error).toHaveBeenCalledWith("Something went wrong");
+    expect(toast.error).toHaveBeenCalledWith("some message");
   });
 
   it("should display error message when on missing success field", async () => {
-    axios.post.mockResolvedValue({ data: { message: "Some message" } });
+    axios.post.mockResolvedValue({
+      data: { message: "Some message" }
+    });
 
     const { getByPlaceholderText, getByText } = render(
       <MemoryRouter initialEntries={["/login"]}>
@@ -197,5 +205,32 @@ describe("Login Component", () => {
 
     await waitFor(() => expect(axios.post).toHaveBeenCalled());
     expect(toast.error).toHaveBeenCalledWith("Some message");
+  });
+
+  it("should display something went wrong toast on status 500", async () => {
+    axios.post.mockResolvedValue({
+      response: {
+        status: 500,
+      },
+    });
+
+    const { getByPlaceholderText, getByText } = render(
+      <MemoryRouter initialEntries={["/login"]}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(getByPlaceholderText("Enter Your Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Password"), {
+      target: { value: "password123" },
+    });
+    fireEvent.click(getByText("LOGIN"));
+
+    await waitFor(() => expect(axios.post).toHaveBeenCalled());
+    expect(toast.error).toHaveBeenCalledWith("Something went wrong");
   });
 });

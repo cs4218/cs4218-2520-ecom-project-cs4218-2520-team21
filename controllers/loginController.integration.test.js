@@ -1,9 +1,11 @@
+// Paing Khant Kyaw, A0257992J
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import request from "supertest";
 import userModel from "../models/userModel.js";
 import { hashPassword } from "../helpers/authHelper.js";
 import startExpressApp from "../expressApp.js";
+import { loginController } from "./authController.js";
 
 let mongoServer;
 let app;
@@ -35,7 +37,99 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("POST /api/v1/auth/login", () => {
+describe("Integration with controller, database and helpers", () => {
+  it("should login an existing user successfully", async () => {
+    const req = {
+      body: {
+        email: testUser.email,
+        password: testUserPassword,
+      },
+    };
+
+    const res = {
+      send: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(),
+    };
+
+    await loginController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        success: true,
+        message: "login successfully",
+      }),
+    );
+  });
+
+  it("should return an error for a non-existent email", async () => {
+    const req = {
+      body: {
+        email: "nonexistent@example.com",
+        password: "wrongpassword",
+      },
+    };
+
+    const res = {
+      send: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(),
+    };
+
+    await loginController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith({
+      success: false,
+      message: "Email is not registered",
+    });
+  });
+
+  it("should return an error for an invalid password", async () => {
+    const req = {
+      body: {
+        email: testUser.email,
+        password: "wrongpassword",
+      },
+    };
+
+    const res = {
+      send: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(),
+    };
+
+    await loginController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({
+      success: false,
+      message: "Invalid Password",
+    });
+  });
+
+  it("should return an error if email or password are not provided", async () => {
+    const req = {
+      body: {
+        email: "",
+        password: "",
+      },
+    };
+
+    const res = {
+      send: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(),
+    };
+
+    await loginController(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith({
+      success: false,
+      message: "Invalid email or password",
+    });
+  });
+});
+
+describe("Integration test using express server", () => {
   it("should login an existing user successfully", async () => {
     const response = await request(app).post("/api/v1/auth/login").send({
       email: testUser.email,
