@@ -1,3 +1,6 @@
+//  Dhruvi Ketan Rathod A0259297J
+// Test was refined with the assistance of AI
+
 import { test, expect } from "@playwright/test";
 
 test.describe.configure({ mode: "parallel" });
@@ -21,8 +24,9 @@ test('admin adds a new category and product, product successfully shown under ca
   await page.getByRole('textbox', { name: 'Enter new category' }).click();
   await page.getByRole('textbox', { name: 'Enter new category' }).fill('Shoes');
   await page.getByRole('button', { name: 'Submit' }).click();
+  await expect(page.getByText('Shoes is created')).toBeVisible();
   await page.getByRole('link', { name: 'Create Product' }).click();
-await page.locator('.ant-select-selector').nth(0).click();
+  await page.locator('.ant-select-selector').nth(0).click();
 
   const dropdown = page.locator('.ant-select-dropdown:not(.ant-select-dropdown-hidden)');
 
@@ -43,15 +47,14 @@ await page.locator('.ant-select-selector').nth(0).click();
   await page.getByPlaceholder('write a quantity').fill('10');
   await page.locator('.ant-select-selector').nth(1).click();
   const dropdown_shipping = page.locator('.ant-select-dropdown:not(.ant-select-dropdown-hidden)');
- 
   const option_shipping = dropdown_shipping.locator('.ant-select-item-option-content', { hasText: /^Yes$/ });
-
   await option_shipping.waitFor({ state: 'visible', timeout: 5000 });
-  
   await option_shipping.click();
   await page.getByRole('button', { name: 'CREATE PRODUCT' }).click();
-  await page.getByRole('link', { name: 'Home' }).click();
+  await expect(page.getByText('Product Created Successfully')).toBeVisible();
   await page.getByRole('link', { name: 'Categories' }).click();
   await page.getByRole('link', { name: 'Shoes', exact: true}).click();
+  const productList = page.locator('.card');
+  await expect(productList).toHaveCount(1);
   await expect(page.getByText('Adidas Shoes$')).toBeVisible();
 });
