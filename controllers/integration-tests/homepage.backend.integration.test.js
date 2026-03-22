@@ -207,26 +207,48 @@ describe('HomePage Integration Tests -- Step 3 (Bottom-Up): Cluster API (M4) and
 
   test('M4+M6: load more - page 2 returns different products than page 1', async () => {
     const clothing = await Category.findOne({ name: 'Clothing' });
-    await Product.create([
-      { name: 'Product A', price: 5, category: clothing._id, description: 'A', slug: 'product-a', quantity: 1 },
-      { name: 'Product B', price: 6, category: clothing._id, description: 'B', slug: 'product-b', quantity: 1 },
-      { name: 'Product C', price: 7, category: clothing._id, description: 'C', slug: 'product-c', quantity: 1 },
-      { name: 'Product D', price: 8, category: clothing._id, description: 'D', slug: 'product-d', quantity: 1 },
-      { name: 'Product E', price: 9, category: clothing._id, description: 'E', slug: 'product-e', quantity: 1 },
-      { name: 'Product F', price: 10, category: clothing._id, description: 'F', slug: 'product-f', quantity: 1 },
-      { name: 'Product G', price: 11, category: clothing._id, description: 'G', slug: 'product-g', quantity: 1 },
-    ]);
 
-    const count = await Product.countDocuments();
-    expect(count).toBe(10); // 3 from beforeEach + 7 extra
+    // Create products one at a time with distinct createdAt timestamps
+    // This ensures sort({ createdAt: -1 }) produces a stable, deterministic order
+    const extraProducts = [
+      { name: 'Product A', price: 5,  slug: 'product-a' },
+      { name: 'Product B', price: 6,  slug: 'product-b' },
+      { name: 'Product C', price: 7,  slug: 'product-c' },
+      { name: 'Product D', price: 8,  slug: 'product-d' },
+      { name: 'Product E', price: 9,  slug: 'product-e' },
+      { name: 'Product F', price: 10, slug: 'product-f' },
+      { name: 'Product G', price: 11, slug: 'product-g' },
+    ];
+
+    for (const p of extraProducts) {
+      await Product.create({
+        ...p,
+        category: clothing._id,
+        description: p.name,
+        quantity: 1,
+      });
+    }
+
+    // Wait for all writes to flush
+    const totalInDB = await Product.countDocuments();
+    expect(totalInDB).toBe(10); // 3 from beforeEach + 7 extra
 
     const page1 = await request(app).get('/api/v1/product/product-list/1');
     const page2 = await request(app).get('/api/v1/product/product-list/2');
 
+    expect(page1.body.products.length).toBe(6);
+    expect(page2.body.products.length).toBeGreaterThan(0);
+
+    // All products across both pages should be unique
     const page1Names = page1.body.products.map(p => p.name);
     const page2Names = page2.body.products.map(p => p.name);
 
     const overlap = page1Names.filter(n => page2Names.includes(n));
     expect(overlap).toHaveLength(0);
+
+    // Verify all products appear exactly once across both pages
+    const allNames = [...page1Names, ...page2Names];
+    expect(allNames.length).toBe(totalInDB);
+    expect(new Set(allNames).size).toBe(totalInDB);
   });
 });
