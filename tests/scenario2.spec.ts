@@ -17,7 +17,8 @@ const USER = {
 const FILTER = {
   category: 'Electronics',
   priceTestId: 'price-$0 to 19',   // matches data-testid={`price-${p.name}`} in HomePage
-  priceMax: 19,
+  priceMin: 0,
+  priceMax: 19
 };
 
 // Login
@@ -47,7 +48,6 @@ test.describe('Login', () => {
 });
 
 // Filter by Category
-
 test.describe('Filter by category', () => {
   test.beforeEach(async ({ page }) => {
     await loginAsUser(page);
@@ -118,6 +118,57 @@ test.describe('Filter by category', () => {
   });
 });
 
+// Filter by Price
+test.describe('Filter by price', () => {
+  test.beforeEach(async ({ page }) => {
+    await loginAsUser(page);
+    await checkHomePageLoaded(page);
+  });
+
+  test('should update results when a price range radio is selected', async ({ page }) => {
+    const before = await page.getByTestId('product-card').count();
+
+    await applyPriceFilter(page, FILTER.priceTestId);
+
+    const after = await page.getByTestId('product-card').count();
+    expect(after).toBeLessThanOrEqual(before);
+  });
+
+  test('should show only products within the selected price range', async ({ page }) => {
+    await applyPriceFilter(page, FILTER.priceTestId);
+
+    // Prices are rendered inside each product card — parse from card text
+    const cards = page.getByTestId('product-card');
+    const count = await cards.count();
+    // Wait until all filtered cards have a visible .card-price
+    for (let i = 0; i < await cards.count(); i++) {
+      await expect(cards.nth(i).locator('.card-price')).toBeVisible();
+    }
+
+    for (let i = 0; i < count; i++) {
+      const priceText = await cards.nth(i).locator('.card-price').textContent();
+      const price = parseFloat(priceText!.replace(/[^0-9.]/g, ''));
+      expect(price).toBeGreaterThanOrEqual(FILTER.priceMin);
+      expect(price).toBeLessThanOrEqual(FILTER.priceMax);
+    }
+  });
+
+  test('should reset to all products when RESET FILTERS is clicked', async ({ page }) => {
+    const before = await page.getByTestId('product-card').count();
+
+    await applyPriceFilter(page, FILTER.priceTestId);
+
+    await Promise.all([
+      page.waitForNavigation(),
+      page.getByRole('button', { name: 'RESET FILTERS' }).click(),
+    ]);
+
+    await checkHomePageLoaded(page);
+    const after = await page.getByTestId('product-card').count();
+    expect(after).toBeGreaterThanOrEqual(before);
+  });
+});
+
 // Helpers
 async function loginAsUser(page: Page) {
   await page.goto(`${BASE_URL}/login`);
@@ -139,4 +190,12 @@ async function checkHomePageLoaded(page: Page) {
   await expect(page).toHaveURL(`${BASE_URL}`);
   await expect(page.getByTestId('products-list')).toBeVisible();
   await expect(page.getByTestId('product-card').first()).toBeVisible();
+}
+
+async function applyPriceFilter(page: Page, priceTestId: string) {
+  // Radio buttons use data-testid="price-$0 to 19" etc. — click the label inside
+  await Promise.all([
+    page.waitForResponse('**/api/v1/product/product-filters**'),
+    page.getByTestId(priceTestId).click(),
+  ]);
 }
