@@ -37,7 +37,8 @@ describe("Given a registration request with user credentials", () => {
 
     await registerController(req, res);
 
-    expect(res.send).toHaveBeenCalledWith({ error: "Name is Required" });
+    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.send).toHaveBeenCalledWith({ message: "Name is Required" });
   });
 
   test("When the request is missing email", async () => {
@@ -45,6 +46,7 @@ describe("Given a registration request with user credentials", () => {
 
     await registerController(req, res);
 
+    expect(res.status).toHaveBeenCalledWith(400)
     expect(res.send).toHaveBeenCalledWith({ message: "Email is Required" });
   });
 
@@ -53,6 +55,7 @@ describe("Given a registration request with user credentials", () => {
 
     await registerController(req, res);
 
+    expect(res.status).toHaveBeenCalledWith(400)
     expect(res.send).toHaveBeenCalledWith({ message: "Password is Required" });
   });
 
@@ -61,6 +64,7 @@ describe("Given a registration request with user credentials", () => {
 
     await registerController(req, res);
 
+    expect(res.status).toHaveBeenCalledWith(400)
     expect(res.send).toHaveBeenCalledWith({
       message: "Phone no is Required",
     });
@@ -71,6 +75,7 @@ describe("Given a registration request with user credentials", () => {
 
     await registerController(req, res);
 
+    expect(res.status).toHaveBeenCalledWith(400)
     expect(res.send).toHaveBeenCalledWith({ message: "Address is Required" });
   });
 
@@ -79,6 +84,7 @@ describe("Given a registration request with user credentials", () => {
 
     await registerController(req, res);
 
+    expect(res.status).toHaveBeenCalledWith(400)
     expect(res.send).toHaveBeenCalledWith({ message: "Date of birth is Required" });
   });
 
@@ -87,6 +93,7 @@ describe("Given a registration request with user credentials", () => {
 
     await registerController(req, res);
 
+    expect(res.status).toHaveBeenCalledWith(400)
     expect(res.send).toHaveBeenCalledWith({
       message: "Answer is Required",
     });

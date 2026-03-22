@@ -6,28 +6,28 @@ import JWT from "jsonwebtoken";
 
 export const registerController = async (req, res) => {
   try {
-    const { name, email, password, phone, address, answer, DOB } = req.body;
+    const { name, email, password, phone, address, answer,  DOB } = req.body;
     //validations
     if (!name) {
-      return res.send({ error: "Name is Required" });
-    } 
+      return res.status(400).send({ message: "Name is Required" });
+    }
     if (!email) {
-      return res.send({ message: "Email is Required" });
+      return res.status(400).send({ message: "Email is Required" });
     }
     if (!password) {
-      return res.send({ message: "Password is Required" });
+      return res.status(400).send({ message: "Password is Required" });
     }
     if (!phone) {
-      return res.send({ message: "Phone no is Required" });
+      return res.status(400).send({ message: "Phone no is Required" });
     }
     if (!address) {
-      return res.send({ message: "Address is Required" });
+      return res.status(400).send({ message: "Address is Required" });
     }
     if (!DOB) {
-      return res.send({message: "Date of birth is Required"})
+      return res.status(400).send({ message: "Date of birth is Required" });
     }
     if (!answer) {
-      return res.send({ message: "Answer is Required" });
+      return res.status(400).send({ message: "Answer is Required" });
     }
     //check user
     const exisitingUser = await userModel.findOne({ email });
@@ -46,7 +46,7 @@ export const registerController = async (req, res) => {
       email,
       phone,
       address,
-      DOB,
+      DOB: DOB,
       password: hashedPassword,
       answer,
     }).save();
@@ -191,7 +191,8 @@ export const updateProfileController = async (req, res) => {
     }
     // phone validation: when provided, must be non-empty
     if (phone !== undefined && phone !== null) {
-      const phoneStr = typeof phone === "string" ? phone.trim() : String(phone).trim();
+      const phoneStr =
+        typeof phone === "string" ? phone.trim() : String(phone).trim();
       if (!phoneStr) {
         return res.status(400).send({
           success: false,
@@ -203,7 +204,9 @@ export const updateProfileController = async (req, res) => {
     if (address !== undefined && address !== null) {
       const isEmpty =
         (typeof address === "string" && !address.trim()) ||
-        (typeof address === "object" && !Array.isArray(address) && Object.keys(address).length === 0);
+        (typeof address === "object" &&
+          !Array.isArray(address) &&
+          Object.keys(address).length === 0);
       if (isEmpty) {
         return res.status(400).send({
           success: false,

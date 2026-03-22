@@ -169,7 +169,7 @@ describe("Register Component", () => {
   });
 
   it("should display error message when exception thrown", async () => {
-    axios.post.mockRejectedValueOnce({ message: "User already exists" });
+    axios.post.mockRejectedValueOnce({ message: "expcetion" });
     const { getByText, getByPlaceholderText } = render(
       <MemoryRouter initialEntries={["/register"]}>
         <Routes>
@@ -204,6 +204,91 @@ describe("Register Component", () => {
 
     await waitFor(() => expect(axios.post).toHaveBeenCalled());
     expect(toast.error).toHaveBeenCalledWith("Something went wrong");
+  });
+
+  it("should display something went wrong on status 500", async () => {
+    axios.post.mockRejectedValueOnce({ response: {
+      data: {},
+      status: 500
+    }});
+    const { getByText, getByPlaceholderText } = render(
+      <MemoryRouter initialEntries={["/register"]}>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(getByPlaceholderText("Enter Your Name"), {
+      target: { value: "John Doe" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Password"), {
+      target: { value: "password123" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Phone"), {
+      target: { value: "1234567890" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Address"), {
+      target: { value: "123 Street" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your DOB"), {
+      target: { value: "2000-01-01" },
+    });
+    fireEvent.change(getByPlaceholderText("What is Your Favorite sports"), {
+      target: { value: "Football" },
+    });
+
+    fireEvent.click(getByText("REGISTER"));
+
+    await waitFor(() => expect(axios.post).toHaveBeenCalled());
+    expect(toast.error).toHaveBeenCalledWith("Something went wrong");
+  });
+
+  it("should display error message when error response is returned", async () => {
+    axios.post.mockRejectedValueOnce({
+      response: {
+        data: {
+          message: "Error in Registeration",
+        },
+      },
+    });
+    const { getByText, getByPlaceholderText } = render(
+      <MemoryRouter initialEntries={["/register"]}>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(getByPlaceholderText("Enter Your Name"), {
+      target: { value: "John Doe" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Password"), {
+      target: { value: "password123" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Phone"), {
+      target: { value: "1234567890" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Address"), {
+      target: { value: "123 Street" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your DOB"), {
+      target: { value: "2000-01-01" },
+    });
+    fireEvent.change(getByPlaceholderText("What is Your Favorite sports"), {
+      target: { value: "Football" },
+    });
+
+    fireEvent.click(getByText("REGISTER"));
+
+    await waitFor(() => expect(axios.post).toHaveBeenCalled());
+    expect(toast.error).toHaveBeenCalledWith("Error in Registeration");
   });
 
   it("should display error message when success is false/undefined", async () => {
@@ -246,5 +331,54 @@ describe("Register Component", () => {
 
     await waitFor(() => expect(axios.post).toHaveBeenCalled());
     expect(toast.error).toHaveBeenCalledWith("User Already Exists");
+  });
+
+  it("should trim leading and trailing white spaces", async () => {
+    axios.post.mockResolvedValueOnce({ data: { success: true } });
+
+    const { getByText, getByPlaceholderText } = render(
+      <MemoryRouter initialEntries={["/register"]}>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(getByPlaceholderText("Enter Your Name"), {
+      target: { value: "  John Doe  " },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Password"), {
+      target: { value: "  password123" },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Phone"), {
+      target: { value: "1234567890  " },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your Address"), {
+      target: { value: "  123 Street  " },
+    });
+    fireEvent.change(getByPlaceholderText("Enter Your DOB"), {
+      target: { value: "2000-01-01" },
+    });
+    fireEvent.change(getByPlaceholderText("What is Your Favorite sports"), {
+      target: { value: "    " },
+    });
+
+    fireEvent.click(getByText("REGISTER"));
+
+    await waitFor(() => expect(axios.post).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(axios.post).toHaveBeenCalledWith("/api/v1/auth/register", {
+        name: "John Doe",
+        email: "test@example.com",
+        password: "password123",
+        phone: "1234567890",
+        address: "123 Street",
+        DOB: "2000-01-01",
+        answer: "",
+      }),
+    );
   });
 });
