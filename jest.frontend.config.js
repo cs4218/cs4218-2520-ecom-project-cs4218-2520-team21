@@ -44,6 +44,7 @@ export default {
     "<rootDir>/client/src/pages/CategoryProduct.test.js",
     "<rootDir>/client/src/pages/ProductDetails.test.js",
     "<rootDir>/client/src/pages/Categories.test.js",
+    "<rootDir>/client/src/pages/Categories.integration.test.js",
     "<rootDir>/client/src/pages/Search.test.js",
     "<rootDir>/client/src/pages/user/*.test.js",
   ],

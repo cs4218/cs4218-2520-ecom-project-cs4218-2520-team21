@@ -229,4 +229,4 @@ Each member has completed the testing for the following files:
   - scenario 12: "user registers, user logs in, user adds product to cart, user checks cart, user updates address"
 - integration tests
   - cart page <-> cart context, auth context, search context
-  - category page
+  - category page <-> useCategory hook
