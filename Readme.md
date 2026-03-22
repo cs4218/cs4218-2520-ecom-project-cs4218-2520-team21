@@ -223,6 +223,9 @@ Each member has completed the testing for the following files:
 - controllers/categoryController.js - my tests are in categoryController.test.js
   - categoryControlller
   - singleCategoryController
-- tests/scenario1.spec.js
-- tests/scenario5.spec.js
-- tests/scenario12.spec.js
+- e2e test scenarios
+  - scenario 1: "user registers, user logs in, user adds product to cart, user pays, user checks order"
+  - scenario 5: "user logs in, user adds multiple products to cart, user removes a product, user pays, user checks order"
+  - scenario 12: "user registers, user logs in, user adds product to cart, user checks cart, user updates address"
+- integration tests
+  -

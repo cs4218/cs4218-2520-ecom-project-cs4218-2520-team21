@@ -10,7 +10,7 @@ test.use({
 export const randomEmail = () =>
   `testscenario5-${(Math.random() + 1).toString(36).substring(7)}@example.com`;
 
-test("user registers, user logs in, user adds product to cart, user pays, user checks order", async ({
+test("user registers, user logs in, user adds multiple products to cart, user removes a product, user pays, user checks order", async ({
   page,
 }) => {
   await page.goto("/");
