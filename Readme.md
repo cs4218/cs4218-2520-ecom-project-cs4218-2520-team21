@@ -141,7 +141,7 @@ The link above is the CI test run for Milestone 1.
 
 ## 7. Distribution of Work
 
-Each member has completed the unit testing for the following files:
+Each member has completed the testing for the following files:
 
 #### Dhruvi Ketan Rathod
 
@@ -223,3 +223,6 @@ Each member has completed the unit testing for the following files:
 - controllers/categoryController.js - my tests are in categoryController.test.js
   - categoryControlller
   - singleCategoryController
+- tests/scenario1.spec.js
+- tests/scenario5.spec.js
+- tests/scenario12.spec.js
