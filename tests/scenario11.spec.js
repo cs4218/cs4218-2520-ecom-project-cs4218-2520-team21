@@ -1,3 +1,6 @@
+//  Dhruvi Ketan Rathod A0259297J
+// Test was refined with the assistance of AI
+
 import { test, expect } from "@playwright/test";
 
 test.describe.configure({ mode: "parallel" });
@@ -6,7 +9,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("http://localhost:3000/");
 });
 
-test('admin updates a category and checks if updates are propagated to products correctly', async ({ page }) => {
+test('admin creates a category and product, updates the category and checks if updates are propagated correctly', async ({ page }) => {
  
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Enter Your Email' }).fill('cs4218@test.com');
@@ -60,6 +63,7 @@ test('admin updates a category and checks if updates are propagated to products 
   await page.getByRole('dialog').getByRole('textbox', { name: 'Enter new category' }).click();
   await page.getByRole('dialog').getByRole('textbox', { name: 'Enter new category' }).fill('Shoes and Accessories');
   await page.getByRole('dialog').getByRole('button', { name: 'Submit' }).click();
+  await expect(page.getByText('Shoes and Accessories is updated')).toBeVisible();
   await page.getByRole('link', { name: 'Home' }).click();
   await page.getByRole('link', { name: 'Categories' }).click();
   await page.getByRole('link', { name: 'Shoes and Accessories' }).click();

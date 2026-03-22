@@ -67,7 +67,7 @@ describe("AdminOrders full integration", () => {
     expect(screen.getByText("Gaming Laptop")).toBeInTheDocument();
   });
 
-  test("admin can update order status", async () => {
+  test("admin can update order status, order status updated correctly", async () => {
     const AuthWrapper = ({ children }) => {
         const [, setAuth] = useAuth();
         useEffect(() => {
@@ -121,10 +121,10 @@ describe("AdminOrders full integration", () => {
         expect(axios.put).toHaveBeenCalledWith("/api/v1/auth/order-status/order1", { status: "Shipped" });
     });
 
-    const visibleSelected = screen.getAllByText("Shipped").filter(el =>
+    const visibleShipped = screen.getAllByText("Shipped").filter(el =>
         el.classList.contains("ant-select-selection-item")
     );
-    expect(visibleSelected).toHaveLength(1);
+    expect(visibleShipped).toHaveLength(1);
     });
 
 
