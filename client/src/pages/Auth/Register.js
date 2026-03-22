@@ -19,13 +19,13 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post("/api/v1/auth/register", {
-        name,
-        email,
-        password,
-        phone,
-        address,
-        DOB,
-        answer,
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        phone: phone.trim(),
+        address: address.trim(),
+        DOB: DOB.trim(),
+        answer: answer.trim(),
       });
       if (res && res.data.success) {
         toast.success("Register Successfully, please login");
@@ -35,7 +35,17 @@ const Register = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      if (error.response) {
+        if (error.response.status === 500) {
+          toast.error("Something went wrong");
+        } else if (error.response.data) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+      } else {
+        toast.error("Something went wrong");
+      }
     }
   };
 

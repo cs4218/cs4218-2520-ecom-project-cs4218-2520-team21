@@ -15,6 +15,7 @@ module.exports = {
   },
   transformIgnorePatterns: ["/node_modules/"],
   collectCoverage: true,
+  coverageDirectory: "coverage/backend",
   collectCoverageFrom: [
     "controllers/**",
     "helpers/**",
