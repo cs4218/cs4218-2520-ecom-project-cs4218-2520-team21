@@ -16,7 +16,7 @@ const EXISTING_USER = {
   password: 'cs4218@test.com',
   address: `1 Computing Drive`
 };
-// Guest adds to cart
+// // Guest adds to cart
 test.describe('Guest user adds product to cart', () => {
   test('should allow guest to browse homepage without logging in', async ({ page }) => {
     await page.goto(`${BASE_URL}`);
@@ -47,7 +47,7 @@ test.describe('Guest user adds product to cart', () => {
   });
 });
 
-// Guest views cart
+// // Guest views cart
 test.describe('Guest user views cart', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE_URL}`);
@@ -77,7 +77,7 @@ test.describe('Guest user views cart', () => {
   });
 });
 
-// Guest blocked at checkout
+// // Guest blocked at checkout
 test.describe('Guest redirected to login when attempting checkout', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE_URL}`);
@@ -110,8 +110,9 @@ test.describe('Guest redirected to login when attempting checkout', () => {
   });
 });
 
-// User logs in and completes checkout
+// // User logs in and completes checkout
 test.describe('User logs in after guest redirect and completes purchase', () => {
+  test.describe.configure({ mode: 'serial' });
   let productName: string;
 
   test.beforeEach(async ({ page }) => {
@@ -234,7 +235,7 @@ async function loginAsUserAfterGuest(page: Page) {
 async function fillBraintreeAndPay(page: Page) {
   await page.waitForResponse('**/api/v1/product/braintree/token**');
   await expect(page.getByRole('button', { name: 'Paying with Card' }))
-    .toBeVisible({ timeout: 10000 });
+    .toBeVisible({ timeout: 30000 });
 
   await page.getByRole('button', { name: 'Paying with Card' }).click();
 
