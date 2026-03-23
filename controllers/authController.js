@@ -1,8 +1,15 @@
 import userModel from "../models/userModel.js";
 import orderModel from "../models/orderModel.js";
+import { createRequire } from "node:module";
 
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
-import JWT from "jsonwebtoken";
+
+const require = createRequire(`${process.cwd()}/controllers/authController.js`);
+const bufferModule = require("buffer");
+if (!bufferModule.SlowBuffer) {
+  bufferModule.SlowBuffer = Buffer;
+}
+const JWT = require("jsonwebtoken");
 
 export const registerController = async (req, res) => {
   try {

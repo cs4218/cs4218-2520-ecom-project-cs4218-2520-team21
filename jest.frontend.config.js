@@ -43,6 +43,12 @@ export default {
     "<rootDir>/client/src/pages/Categories.test.js",
     "<rootDir>/client/src/pages/Search.test.js",
     "<rootDir>/client/src/pages/user/*.test.js",
+    // Integration tests (sandwich approach)
+    "<rootDir>/client/src/pages/user/*.integration.test.js",
+    "<rootDir>/client/src/pages/admin/*.integration.test.js",
+    "<rootDir>/client/src/pages/*.integration.test.js",
+    "<rootDir>/client/src/components/Form/*.integration.test.js",
+    "<rootDir>/client/src/components/Routes/*.integration.test.js",
   ],
 
   // jest code coverage

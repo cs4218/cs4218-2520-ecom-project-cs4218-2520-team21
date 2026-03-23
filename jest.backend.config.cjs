@@ -8,11 +8,13 @@ module.exports = {
     "<rootDir>/helpers/*.test.js",
     "<rootDir>/middlewares/*.test.js",
     "<rootDir>/config/*.test.js",
+    "<rootDir>/routes/*.integration.test.js",
   ],
   transform: {
     "^.+\\.js$": "babel-jest",
   },
   transformIgnorePatterns: ["/node_modules/"],
+  setupFilesAfterEnv: [],
   collectCoverage: true,
   collectCoverageFrom: [
     "controllers/**",
@@ -20,6 +22,7 @@ module.exports = {
     "middlewares/**",
     "config/**",
     "models/**",
+    "routes/**",
   ],
   coverageThreshold: {
     global: {
