@@ -157,7 +157,6 @@ Each member has completed the testing for the following files:
   - Only create, update and delete functions: test file is in controllers/productControllerBasic.test.js
 
 #### Paing Khant Kyaw
-
 - context/auth.js
 - helpers/authHelper.js
 - middlewares/authMiddleware.js
@@ -175,6 +174,18 @@ Each member has completed the testing for the following files:
 - pages/About.js
 - pages/Pagenotfound.js
 - config/db.js
+- e2e test scenarios
+  - Scenario 7: user logs in, user views all product categories, user clicks on a particular category and views products of that category, user adds product to cart, user pays, check if reflected in orders
+  - Scenario 9: User logs in, user goes to dashboard page, user deletes account, try to log back in → failure
+- integration test
+  - forgot.intgration.spec.js
+  - login.integration.spec.js
+  - register.integration.spec.js
+  - loginController.integration.test.js
+  - forgotPasswordController.integration.test.js
+  - registerController.integration.test.js
+  - Header.integation.js
+
 
 #### Ariella Thirza Callista
 
