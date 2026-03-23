@@ -281,3 +281,6 @@ Each member has completed the integration and UI testing for the following files
 - integration tests
   - cart page <-> cart context, auth context, search context
   - category page <-> useCategory hook
+
+#### Lim Rui Ting Valencia
+for both e2e test scenarios and integration tests done, refer to ms2 report
