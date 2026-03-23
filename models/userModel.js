@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema(
     },
     DOB: {
       type: String,
-      required: true,
       default: ""
     },
     answer: {
