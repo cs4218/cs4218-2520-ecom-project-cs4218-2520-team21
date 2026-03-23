@@ -223,13 +223,7 @@ Each member has completed the testing for the following files:
 - controllers/categoryController.js - my tests are in categoryController.test.js
   - categoryControlller
   - singleCategoryController
-- e2e test scenarios
-  - scenario 1: "user registers, user logs in, user adds product to cart, user pays, user checks order"
-  - scenario 5: "user logs in, user adds multiple products to cart, user removes a product, user pays, user checks order"
-  - scenario 12: "user registers, user logs in, user adds product to cart, user checks cart, user updates address"
-- integration tests
-  - cart page <-> cart context, auth context, search context
-  - category page <-> useCategory hook
+
 
 
 ## 8. Distribution of Work (MS2)
@@ -247,4 +241,35 @@ Each member has completed the integration and UI testing for the following files
    - controllers/productControllerBasic.integration.test.js
    - client/src/pages/admin/CreateProduct.integration.test.js
    - client/src/pages/admin/AdminOrders.integration.test.js
+
+#### Ariella Thirza Callista
+- e2e test scenarios
+   - `tests/scenario2.spec.js`: User logs in -> filter by category/price/both -> view product detail -> add to cart -> checkout and make payment -> user checks order
+   - `tests/scenario4.spec.js`: Guest adds to cart from HomePage -> attempts checkout -> redirected to login -> User logs in -> continues and completes purchase
+ 
+- integration tests
+   - **HomePage** <-> CartContext, HomePage <-> CartPage, HomePage <-> express <-> MongoDB
+   - **ProductDetails** <-> CartContext, ProductDetails <-> CartPage, ProductDetails <-> express <-> MongoDB
+   - FE Integration Tests are found in
+     ```
+     client/src/pages/HomePage.integration.test.js
+     client/src/pages/ProductDetails.integration.test.js
+     ```
+   - BE Integration Tests are found in
+     ```
+     controllers/integration-tests/homepage.backend.integration.test.js
+     controllers/integration-tests/productdetails.backend.integration.test.js
+     ```
+     
+#### Xenos Fiorenzo Anong
+- e2e test scenarios
+  - scenario 1: "user registers, user logs in, user adds product to cart, user pays, user checks order"
+  - scenario 5: "user logs in, user adds multiple products to cart, user removes a product, user pays, user checks order"
+  - scenario 12: "user registers, user logs in, user adds product to cart, user checks cart, user updates address"
+    
+- integration tests
+  - cart page <-> cart context, auth context, search context
+  - category page <-> useCategory hook
+
+
 
