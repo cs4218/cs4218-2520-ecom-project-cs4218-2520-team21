@@ -17,17 +17,18 @@ test('user logs in, searches for a product and adds to cart, adds related produc
   await page.getByRole('textbox', { name: 'Enter Your Password' }).click();
   await page.getByRole('textbox', { name: 'Enter Your Password' }).fill("cs4218@test.com");
   await page.getByRole('button', { name: 'LOGIN' }).click();
+  await expect(page.getByText('login successfully')).toBeVisible();
   await page.getByRole('searchbox', { name: 'Search' }).click();
   await page.getByRole('searchbox', { name: 'Search' }).fill('laptop');
   await page.getByRole('button', { name: 'Search' }).click();
+  await expect(page.getByText('Search Resuts')).toBeVisible();
   await page.getByRole('button', { name: 'More Details' }).first().click();
-  await page.waitForLoadState('networkidle')
+  await expect(page.getByText('A powerful laptop')).toBeVisible();
   await page.getByRole('button', { name: 'ADD TO CART' }).first().click();
 
   await page.getByRole('button', { name: 'More Details' }).nth(1).click();
-  await page.waitForLoadState('networkidle')
+  await expect(page.getByText('A high-end smartphone')).toBeVisible();
   await page.getByRole('button', { name: 'ADD TO CART' }).nth(1).click();
-  await page.waitForLoadState('networkidle')
   
   await page.getByRole('link', { name: 'Cart' }).click();
 
