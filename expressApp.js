@@ -8,7 +8,9 @@ import cors from "cors";
 
 function startExpressApp(/** @type {() => Promise<void>}*/ connectDB) {
   // configure env
-  dotenv.config();
+  if (process.env.NODE_ENV !== 'test') {
+    dotenv.config();
+  }
 
   //database config
   connectDB();

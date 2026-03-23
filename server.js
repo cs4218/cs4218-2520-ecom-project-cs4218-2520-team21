@@ -3,9 +3,13 @@ import connectDB from "./config/db.js";
 import startExpressApp from "./expressApp.js";
 
 // configure env
-dotenv.config();
+if (process.env.NODE_ENV !== 'test') {
+    dotenv.config();
+}
 const app = startExpressApp(() => {
-    connectDB();
+    if (process.env.NODE_ENV !== 'test') {
+        connectDB();
+    }
 })
 
 const PORT = process.env.PORT || 6060;

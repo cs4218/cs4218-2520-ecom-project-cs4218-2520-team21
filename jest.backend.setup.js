@@ -100,10 +100,9 @@ global.testUtils = {
 
 beforeAll(async () => {
   if (mongoose.connection.readyState !== 1) {
-    if (!process.env.MONGO_URL) {
-      mongoServer = await MongoMemoryServer.create();
-      process.env.MONGO_URL = mongoServer.getUri();
-    }
+    // Force an isolated in-memory MongoDB for backend tests.
+    mongoServer = await MongoMemoryServer.create();
+    process.env.MONGO_URL = mongoServer.getUri();
     await mongoose.connect(process.env.MONGO_URL, {
       serverSelectionTimeoutMS: 10000,
     });
