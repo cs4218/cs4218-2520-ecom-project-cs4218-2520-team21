@@ -157,7 +157,6 @@ Each member has completed the testing for the following files:
   - Only create, update and delete functions: test file is in controllers/productControllerBasic.test.js
 
 #### Paing Khant Kyaw
-
 - context/auth.js
 - helpers/authHelper.js
 - middlewares/authMiddleware.js
@@ -175,6 +174,18 @@ Each member has completed the testing for the following files:
 - pages/About.js
 - pages/Pagenotfound.js
 - config/db.js
+- e2e test scenarios
+  - Scenario 7: user logs in, user views all product categories, user clicks on a particular category and views products of that category, user adds product to cart, user pays, check if reflected in orders
+  - Scenario 9: User logs in, user goes to dashboard page, user deletes account, try to log back in → failure
+- integration test
+  - forgot.intgration.spec.js
+  - login.integration.spec.js
+  - register.integration.spec.js
+  - loginController.integration.test.js
+  - forgotPasswordController.integration.test.js
+  - registerController.integration.test.js
+  - Header.integation.js
+
 
 #### Ariella Thirza Callista
 
@@ -223,13 +234,7 @@ Each member has completed the testing for the following files:
 - controllers/categoryController.js - my tests are in categoryController.test.js
   - categoryControlller
   - singleCategoryController
-- e2e test scenarios
-  - scenario 1: "user registers, user logs in, user adds product to cart, user pays, user checks order"
-  - scenario 5: "user logs in, user adds multiple products to cart, user removes a product, user pays, user checks order"
-  - scenario 12: "user registers, user logs in, user adds product to cart, user checks cart, user updates address"
-- integration tests
-  - cart page <-> cart context, auth context, search context
-  - category page <-> useCategory hook
+
 
 
 ## 8. Distribution of Work (MS2)
@@ -247,4 +252,35 @@ Each member has completed the integration and UI testing for the following files
    - controllers/productControllerBasic.integration.test.js
    - client/src/pages/admin/CreateProduct.integration.test.js
    - client/src/pages/admin/AdminOrders.integration.test.js
+
+#### Ariella Thirza Callista
+- e2e test scenarios
+   - `tests/scenario2.spec.js`: User logs in -> filter by category/price/both -> view product detail -> add to cart -> checkout and make payment -> user checks order
+   - `tests/scenario4.spec.js`: Guest adds to cart from HomePage -> attempts checkout -> redirected to login -> User logs in -> continues and completes purchase
+ 
+- integration tests
+   - **HomePage** <-> CartContext, HomePage <-> CartPage, HomePage <-> express <-> MongoDB
+   - **ProductDetails** <-> CartContext, ProductDetails <-> CartPage, ProductDetails <-> express <-> MongoDB
+   - FE Integration Tests are found in
+     ```
+     client/src/pages/HomePage.integration.test.js
+     client/src/pages/ProductDetails.integration.test.js
+     ```
+   - BE Integration Tests are found in
+     ```
+     controllers/integration-tests/homepage.backend.integration.test.js
+     controllers/integration-tests/productdetails.backend.integration.test.js
+     ```
+     
+#### Xenos Fiorenzo Anong
+- e2e test scenarios
+  - scenario 1: "user registers, user logs in, user adds product to cart, user pays, user checks order"
+  - scenario 5: "user logs in, user adds multiple products to cart, user removes a product, user pays, user checks order"
+  - scenario 12: "user registers, user logs in, user adds product to cart, user checks cart, user updates address"
+    
+- integration tests
+  - cart page <-> cart context, auth context, search context
+  - category page <-> useCategory hook
+
+
 
