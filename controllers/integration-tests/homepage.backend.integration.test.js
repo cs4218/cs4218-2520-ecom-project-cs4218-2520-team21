@@ -20,6 +20,7 @@ import {
 // App setup
 // M3 — Express routes wired to controllers
 // M6 — MongoDB via MongoMemoryServer
+jest.mock("braintree");
 
 const app = express();
 app.use(express.json());
