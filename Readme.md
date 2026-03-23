@@ -232,7 +232,7 @@ Each member has completed the testing for the following files:
   - category page <-> useCategory hook
 
 
-## 7. Distribution of Work (MS2)
+## 8. Distribution of Work (MS2)
 
 Each member has completed the integration and UI testing for the following files:
 
