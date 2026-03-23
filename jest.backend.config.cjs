@@ -16,6 +16,7 @@ module.exports = {
   transformIgnorePatterns: ["/node_modules/"],
   setupFilesAfterEnv: [],
   collectCoverage: true,
+  coverageDirectory: "coverage/backend",
   collectCoverageFrom: [
     "controllers/**",
     "helpers/**",
