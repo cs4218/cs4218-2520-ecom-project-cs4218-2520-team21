@@ -283,4 +283,5 @@ Each member has completed the integration and UI testing for the following files
   - category page <-> useCategory hook
 
 #### Lim Rui Ting Valencia
-for both e2e test scenarios and integration tests done, refer to ms2 report
+for both e2e test scenarios and integration tests done, refer to ms2 report. To test for my UI testing, please use the following command:
+`PW_SKIP_WEBSERVER=1 E2E_ADMIN_EMAIL='admin@admin.com' E2E_ADMIN_PASSWORD='admin' npx playwright test --config=playwright.config.ts`
