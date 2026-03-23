@@ -1,3 +1,5 @@
+// Lim Rui Ting Valencia, A0255150N
+
 /**
  * PrivateRoute + Protected Page Integration Test
  * 
@@ -15,7 +17,6 @@ import axios from 'axios';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../../context/auth';
 import PrivateRoute from '../../components/Routes/Private';
-import Dashboard from '../../pages/user/Dashboard';
 
 jest.mock('axios');
 

@@ -1,3 +1,5 @@
+// Lim Rui Ting Valencia, A0255150N
+
 /**
  * SearchInput + Search Integration Test
  * 
