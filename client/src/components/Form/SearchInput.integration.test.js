@@ -16,6 +16,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { SearchProvider } from '../../context/search';
+import { CartProvider } from '../../context/cart';
 import SearchInput from '../../components/Form/SearchInput';
 import Search from '../../pages/Search';
 
@@ -52,10 +53,12 @@ describe('Component Integration: SearchInput ↔ Search via Context', () => {
     return render(
       <MemoryRouter initialEntries={['/']}>
         <SearchProvider>
-          <Routes>
-            <Route path="/" element={<SearchInput />} />
-            <Route path="/search" element={<Search />} />
-          </Routes>
+          <CartProvider>
+            <Routes>
+              <Route path="/" element={<SearchInput />} />
+              <Route path="/search" element={<Search />} />
+            </Routes>
+          </CartProvider>
         </SearchProvider>
       </MemoryRouter>
     );
