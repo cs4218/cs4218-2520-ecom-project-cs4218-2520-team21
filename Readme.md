@@ -139,7 +139,7 @@ To begin unit testing with Jest in your project, follow these steps:
 Link: https://github.com/cs4218/cs4218-2520-ecom-project-cs4218-2520-team21/actions/runs/22291437341/job/64479328858
 The link above is the CI test run for Milestone 1.
 
-## 7. Distribution of Work
+## 7. Distribution of Work (MS1)
 
 Each member has completed the testing for the following files:
 
@@ -230,3 +230,21 @@ Each member has completed the testing for the following files:
 - integration tests
   - cart page <-> cart context, auth context, search context
   - category page <-> useCategory hook
+
+
+## 8. Distribution of Work (MS2)
+
+Each member has completed the integration and UI testing for the following files:
+
+#### Dhruvi Ketan Rathod
+- e2e test scenarios
+   - tests/scenario3.spec.js: Admin logs in, adds a new category, adds a new product using the new category, checks if product shows up under the created category
+   - tests/scenario6.spec.js: User logs in, searches for a product, adds first product displayed to cart, adds a related product to cart, pays, checks if order reflected with 2 products
+   - tests/scenario11.spec.js: Admin logs in, adds a new category, adds a new product using the new category, updates the category just created, checks if the same product shows up under the updated category name
+
+- integration tests
+   - controllers/categoryControllerBasic.integration.test.js
+   - controllers/productControllerBasic.integration.test.js
+   - client/src/pages/admin/CreateProduct.integration.test.js
+   - client/src/pages/admin/AdminOrders.integration.test.js
+
