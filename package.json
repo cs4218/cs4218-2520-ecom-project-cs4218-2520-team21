@@ -12,6 +12,7 @@
     "test:e2e:report": "playwright show-report",
     "sonarqube": "sonar-scanner",
     "test": "npm run test:backend && npm run test:frontend",
+    "uitest": "playwright test",
     "test:frontend": "node node_modules/jest/bin/jest.js --config jest.frontend.config.js",
     "test:backend": "node node_modules/jest/bin/jest.js --config jest.backend.config.cjs"
   },
@@ -30,6 +31,7 @@
     "express-formidable": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
+    "mongodb-memory-server": "^11.0.1",
     "mongoose": "^8.1.2",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.3",
