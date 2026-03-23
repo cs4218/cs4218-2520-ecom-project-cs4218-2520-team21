@@ -20,17 +20,17 @@ test('admin creates a category and product, updates the category and checks if u
   await page.getByRole('link', { name: 'Dashboard' }).click();
   await page.getByRole('link', { name: 'Create Category' }).click();
   await page.getByRole('textbox', { name: 'Enter new category' }).click();
-  await page.getByRole('textbox', { name: 'Enter new category' }).fill('Shoes');
+  await page.getByRole('textbox', { name: 'Enter new category' }).fill('Shoes1');
   await page.getByRole('button', { name: 'Submit' }).click();
-  // ensure that shoes is not already an existing category (if it is delete or rename it to ensure the category can be created)
-  await expect(page.getByText('Shoes is created')).toBeVisible();
+  // ensure that shoes1 is not already an existing category (if it is delete or rename it to ensure the category can be created)
+  await expect(page.getByText('Shoes1 is created')).toBeVisible();
 
   await page.getByRole('link', { name: 'Create Product' }).click();
   await page.locator('.ant-select-selector').nth(0).click();
 
   const dropdown = page.locator('.ant-select-dropdown:not(.ant-select-dropdown-hidden)');
 
-  const option = dropdown.locator('.ant-select-item-option-content', { hasText: /^Shoes$/ });
+  const option = dropdown.locator('.ant-select-item-option-content', { hasText: /^Shoes1$/ });
 
   await option.waitFor({ state: 'visible', timeout: 5000 });
 
@@ -58,7 +58,7 @@ test('admin creates a category and product, updates the category and checks if u
   await page.getByRole('link', { name: 'Create Category' }).click();
   await page
     .locator('tr')
-    .filter({ hasText: 'Shoes' })
+    .filter({ hasText: 'Shoes1' })
     .getByRole('button', { name: 'Edit' })
     .click();
   await page.getByRole('dialog').getByRole('textbox', { name: 'Enter new category' }).click();
