@@ -20,14 +20,42 @@ export default {
   transformIgnorePatterns: ["/node_modules/(?!(styleMock\\.js)$)"],
 
   // only run these tests
+  // only run these tests
   testMatch: [
     "<rootDir>/client/src/pages/Auth/*.test.js",
-    "<rootDir>/client/src/components/**/*.test.js",  // ** covers Form/ and Routes/ subdirs
+    "<rootDir>/client/src/components/*.test.js",
+    "<rootDir>/client/src/components/Form/*.test.js",
+    "<rootDir>/client/src/pages/Auth/*.test.js",
+    "<rootDir>/client/src/components/*.test.js",
+    "<rootDir>/client/src/components/Form/*.test.js",
+    "<rootDir>/client/src/components/Routes/*.test.js",
     "<rootDir>/client/src/pages/admin/*.test.js",
-    "<rootDir>/client/src/context/*.test.js",         // covers auth.test.js, search.test.js, cart.test.js
-    "<rootDir>/client/src/hooks/*.test.js",           // covers useCategory.test.js
+    "<rootDir>/client/src/pages/Auth/*.test.js",
+    "<rootDir>/client/src/context/auth.test.js",
+    "<rootDir>/client/src/context/search.test.js",
+    "<rootDir>/client/src/pages/About.test.js",
+    "<rootDir>/client/src/pages/Pagenotfound.test.js",
+    "<rootDir>/client/src/pages/CartPage.test.js",
+    "<rootDir>/client/src/pages/CartPage.integration.test.js",
+    "<rootDir>/client/src/pages/Contact.test.js",
+    "<rootDir>/client/src/pages/Policy.test.js",
+    "<rootDir>/client/src/context/cart.test.js",
+    "<rootDir>/client/src/hooks/useCategory.test.js",
+    "<rootDir>/client/src/pages/HomePage.test.js",
+    "<rootDir>/client/src/pages/CategoryProduct.test.js",
+    "<rootDir>/client/src/pages/ProductDetails.test.js",
+    "<rootDir>/client/src/pages/Categories.test.js",
+    "<rootDir>/client/src/pages/Categories.integration.test.js",
+    "<rootDir>/client/src/pages/ProductDetails.integration.test.js",
+    "<rootDir>/client/src/pages/HomePage.integration.test.js",
+    "<rootDir>/client/src/pages/Search.test.js",
     "<rootDir>/client/src/pages/user/*.test.js",
-    "<rootDir>/client/src/pages/*.test.js",           // covers all pages including integration tests
+    // Integration tests (sandwich approach)
+    "<rootDir>/client/src/pages/user/*.integration.test.js",
+    "<rootDir>/client/src/pages/admin/*.integration.test.js",
+    "<rootDir>/client/src/pages/*.integration.test.js",
+    "<rootDir>/client/src/components/Form/*.integration.test.js",
+    "<rootDir>/client/src/components/Routes/*.integration.test.js",
   ],
   
   // jest code coverage
