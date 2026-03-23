@@ -24,6 +24,7 @@ test('admin adds a new category and product, product successfully shown under ca
   await page.getByRole('textbox', { name: 'Enter new category' }).click();
   await page.getByRole('textbox', { name: 'Enter new category' }).fill('Shoes');
   await page.getByRole('button', { name: 'Submit' }).click();
+  // ensure that shoes is not already an existing category (if it is delete or rename it to ensure the category can be created)
   await expect(page.getByText('Shoes is created')).toBeVisible();
   await page.getByRole('link', { name: 'Create Product' }).click();
   await page.locator('.ant-select-selector').nth(0).click();

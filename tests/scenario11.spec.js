@@ -22,6 +22,7 @@ test('admin creates a category and product, updates the category and checks if u
   await page.getByRole('textbox', { name: 'Enter new category' }).click();
   await page.getByRole('textbox', { name: 'Enter new category' }).fill('Shoes');
   await page.getByRole('button', { name: 'Submit' }).click();
+  // ensure that shoes is not already an existing category (if it is delete or rename it to ensure the category can be created)
   await expect(page.getByText('Shoes is created')).toBeVisible();
 
   await page.getByRole('link', { name: 'Create Product' }).click();
@@ -63,6 +64,7 @@ test('admin creates a category and product, updates the category and checks if u
   await page.getByRole('dialog').getByRole('textbox', { name: 'Enter new category' }).click();
   await page.getByRole('dialog').getByRole('textbox', { name: 'Enter new category' }).fill('Shoes and Accessories');
   await page.getByRole('dialog').getByRole('button', { name: 'Submit' }).click();
+  // ensure shoes and accessories was not already an existing category
   await expect(page.getByText('Shoes and Accessories is updated')).toBeVisible();
   await page.getByRole('link', { name: 'Home' }).click();
   await page.getByRole('link', { name: 'Categories' }).click();
