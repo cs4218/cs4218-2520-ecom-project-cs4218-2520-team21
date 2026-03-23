@@ -20,6 +20,7 @@ export default {
   transformIgnorePatterns: ["/node_modules/(?!(styleMock\\.js)$)"],
 
   // only run these tests
+  // only run these tests
   testMatch: [
     "<rootDir>/client/src/pages/Auth/*.test.js",
     "<rootDir>/client/src/components/*.test.js",
@@ -45,6 +46,8 @@ export default {
     "<rootDir>/client/src/pages/ProductDetails.test.js",
     "<rootDir>/client/src/pages/Categories.test.js",
     "<rootDir>/client/src/pages/Categories.integration.test.js",
+    "<rootDir>/client/src/pages/ProductDetails.integration.test.js",
+    "<rootDir>/client/src/pages/HomePage.integration.test.js",
     "<rootDir>/client/src/pages/Search.test.js",
     "<rootDir>/client/src/pages/user/*.test.js",
     // Integration tests (sandwich approach)
@@ -54,7 +57,7 @@ export default {
     "<rootDir>/client/src/components/Form/*.integration.test.js",
     "<rootDir>/client/src/components/Routes/*.integration.test.js",
   ],
-
+  
   // jest code coverage
   coverageDirectory: "coverage/frontend",
   collectCoverage: true,

@@ -8,6 +8,7 @@ module.exports = {
     "<rootDir>/helpers/*.test.js",
     "<rootDir>/middlewares/*.test.js",
     "<rootDir>/config/*.test.js",
+    "<rootDir>/controllers/integration-tests/*.test.js",
     "<rootDir>/routes/*.integration.test.js",
   ],
   transform: {

@@ -144,7 +144,7 @@ const HomePage = () => {
             <Radio.Group onChange={(e) => setRadio(e.target.value)}>
               {Prices?.map((p) => (
                 <div key={p._id}>
-                  <Radio value={p.array}>{p.name}</Radio>
+                  <Radio value={p.array} data-testid={`price-${p.name}`}>{p.name}</Radio>
                 </div>
               ))}
             </Radio.Group>
@@ -166,10 +166,12 @@ const HomePage = () => {
           </div>
         </div>
         <div className="col-md-9 ">
+          {/* Edited by A0255876L to add test-id */}
           <h1 className="text-center">All Products</h1>
-          <div className="d-flex flex-wrap">
+          <div data-testid="products-list" className="d-flex flex-wrap">
             {products?.map((p) => (
-              <div className="card m-2" key={p._id}>
+              // Edited by A0255876L to add test-id
+              <div data-testid="product-card" className="card m-2" key={p._id}>
                 <img
                   src={`/api/v1/product/product-photo/${p._id}`}
                   className="card-img-top"
