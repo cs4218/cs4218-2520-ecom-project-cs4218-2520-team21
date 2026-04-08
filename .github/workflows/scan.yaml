@@ -1,5 +1,5 @@
 # Xenos Fiorenzo Anong, A0257672U
-# adapted from https://github.com/aquasecurity/trivy-sarif-demo/blob/master/.github/workflows/scan.yml
+# adapted from example code here: https://github.com/marketplace/actions/aqua-security-trivy
 
 name: "Code Scanning"
 
@@ -11,7 +11,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 0 * * 1"
+    - cron: "0 0 * * 1" # Mon 00:00
 
 jobs:
   sast-trivy:
