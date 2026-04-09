@@ -6,6 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
+    "pm2:client": "pm2 start server.js --name my-backend",
+    "pm2:client-reload": "pm2 reload my-backend",
+    "pm2:server": "pm2 start server.js --name my-backend",
+    "pm2:server-reload": "pm2 reload my-backend",
     "client": "npm start --prefix ./client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test:e2e": "playwright test",
