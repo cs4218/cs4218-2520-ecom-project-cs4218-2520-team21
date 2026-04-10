@@ -2,13 +2,15 @@
 // Should be tested after running pm2 server in the background to work
 // npm run pm2:server
 // command to test (windows): set K6_WEB_DASHBOARD_PERIOD=1s && set K6_WEB_DASHBOARD=true && k6 run tests/recovery/backend_crash_recovery_test.js
+// $env:K6_WEB_DASHBOARD_PERIOD="1s"; $env:K6_WEB_DASHBOARD="true"; $env:K6_WEB_DASHBOARD_EXPORT="reports/backend-crash-recovery-report.html"; k6 run --summary-export=reports/backend-crash-recovery-summary.json tests/recovery/backend_crash_recovery_test.js
+
 import http from "k6/http";
 import { check, sleep } from "k6";
 import exec from "k6/execution";
 
 const BASE_URL = "http://localhost:6060";
 const CRASH_TOKEN = "recover-test-token";
-const CRASH_SCHEDULE_MS = [30000, 90000, 150000];
+const CRASH_SCHEDULE_MS = [300000, 720000, 1200000];
 
 const triggeredCrashes = new Set();
 
@@ -17,26 +19,20 @@ export const options = {
     recovery: {
       executor: "constant-vus",
       vus: 100,
-      duration: "3m",
+      duration: "30m",
     },
   },
   stages: undefined,
   thresholds: {
-    http_req_failed: ["rate<0.8"],
+    http_req_failed: ["rate<0.5"],
   },
 };
 
 export function setup() {
-  const res = http.post(`${BASE_URL}/test/crash`, null, {
-    headers: {
-      "x-crash-token": CRASH_TOKEN,
-    },
-  });
-
   return {
-    crashTriggered: true,
-    crashStatus: res.status,
-    crashBody: res.body,
+    crashTriggered: false,
+    crashStatus: null,
+    crashBody: null,
   };
 }
 

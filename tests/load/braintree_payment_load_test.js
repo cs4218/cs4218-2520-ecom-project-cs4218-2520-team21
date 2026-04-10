@@ -1,11 +1,10 @@
-// Braintree payment API load test
-// Windows (cmd) examples:
-// set K6_WEB_DASHBOARD_PERIOD=1s && set K6_WEB_DASHBOARD=true && k6 run tests/load/braintree_payment_load_test.js
+// Paing Khant Kyaw, A0257992J
+// $env:K6_WEB_DASHBOARD_PERIOD="1s"; $env:K6_WEB_DASHBOARD="true"; $env:K6_WEB_DASHBOARD_EXPORT="reports/braintree-payment-load-report.html"; k6 run --summary-export=reports/braintree-payment-load-summary.json tests/load/braintree_payment_load_test.js
 import http from "k6/http";
 import { check, sleep } from "k6";
 
 const BASE_URL = __ENV.BASE_URL || "http://localhost:6060";
-const TARGET_VUS = 20;
+const TARGET_VUS = 50;
 const AUTH_TOKEN = __ENV.AUTH_TOKEN || "";
 const TEST_EMAIL = "testing@gmail.com";
 const TEST_PASSWORD = "1234qwer";
@@ -17,9 +16,9 @@ export const options = {
       executor: "ramping-vus",
       startVUs: 1,
       stages: [
-        { duration: "2m", target: TARGET_VUS },
-        { duration: "5m", target: TARGET_VUS },
-        { duration: "2m", target: 0 },
+        { duration: "10m", target: TARGET_VUS },
+        { duration: "20m", target: TARGET_VUS },
+        { duration: "10m", target: 0 },
       ],
       gracefulRampDown: "30s",
     },
@@ -99,5 +98,5 @@ export default function (data) {
     },
   });
 
-  sleep(3);
+  sleep(5);
 }

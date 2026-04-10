@@ -1,9 +1,11 @@
 // Paing Khant Kyaw, A0257992J
-// Run on Windows (cmd): set K6_WEB_DASHBOARD_PERIOD=1s && set K6_WEB_DASHBOARD=true && k6 run tests/load/product_filters_load_test.js
+// Run on Windows (pwsh):
+// $env:K6_WEB_DASHBOARD_PERIOD="1s"; $env:K6_WEB_DASHBOARD="true"; $env:K6_WEB_DASHBOARD_EXPORT="reports/product-filter-load-report.html"; k6 run --summary-export=reports/product-filter-load-summary.json tests/load/product_filters_load_test.js
 import http from "k6/http";
 import { check, sleep } from "k6";
 
 const BASE_URL = __ENV.BASE_URL || "http://localhost:6060";
+const TARGET_VUS = 300;
 
 export const options = {
   scenarios: {
@@ -11,9 +13,9 @@ export const options = {
       executor: "ramping-vus",
       startVUs: 1,
       stages: [
-        { duration: "2m", target: 200 },
-        { duration: "5m", target: 200 },
-        { duration: "2m", target: 0 },
+        { duration: "10m", target: TARGET_VUS },
+        { duration: "20m", target: TARGET_VUS },
+        { duration: "10m", target: 0 },
       ],
       gracefulRampDown: "30s",
     },

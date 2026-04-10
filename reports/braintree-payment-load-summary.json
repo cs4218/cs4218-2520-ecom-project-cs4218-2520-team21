@@ -1,0 +1,155 @@
+{
+    "metrics": {
+        "http_req_connecting": {
+            "avg": 0.0019467477023421293,
+            "min": 0,
+            "med": 0,
+            "max": 1.6275,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 50
+        },
+        "http_req_sending": {
+            "min": 0,
+            "med": 0,
+            "max": 1.1245,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.007858849688704409
+        },
+        "iterations": {
+            "count": 16863,
+            "rate": 7.009029885369135
+        },
+        "http_req_failed": {
+            "fails": 16865,
+            "passes": 0,
+            "thresholds": {
+                "rate<0.3": false
+            },
+            "value": 0
+        },
+        "http_reqs": {
+            "count": 16865,
+            "rate": 7.009861176347652
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 362.73017541061387,
+            "min": 291.8822,
+            "med": 340.6,
+            "max": 2711.437,
+            "p(90)": 390.63686,
+            "p(95)": 606.7966999999999
+        },
+        "http_req_waiting": {
+            "avg": 362.19689292024907,
+            "min": 290.3108,
+            "med": 340.0483,
+            "max": 2711.0557,
+            "p(90)": 389.99446000000006,
+            "p(95)": 606.2746199999999
+        },
+        "http_req_receiving": {
+            "max": 1.6667,
+            "p(90)": 1.053,
+            "p(95)": 1.1593799999999999,
+            "avg": 0.5254236406759573,
+            "min": 0,
+            "med": 0.4738
+        },
+        "data_received": {
+            "count": 4676290,
+            "rate": 1943.6788449654766
+        },
+        "checks": {
+            "passes": 33726,
+            "fails": 0,
+            "value": 1
+        },
+        "http_req_duration": {
+            "max": 2711.437,
+            "p(90)": 390.63686,
+            "p(95)": 606.7966999999999,
+            "avg": 362.73017541061387,
+            "min": 291.8822,
+            "med": 340.6,
+            "thresholds": {
+                "p(95)<5000": false
+            }
+        },
+        "vus_max": {
+            "value": 50,
+            "min": 50,
+            "max": 50
+        },
+        "data_sent": {
+            "count": 9376115,
+            "rate": 3897.1399065206565
+        },
+        "http_req_blocked": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.00358144678327898,
+            "min": 0,
+            "med": 0,
+            "max": 4.9293
+        },
+        "iteration_duration": {
+            "avg": 5363.239294805187,
+            "min": 5303.6145,
+            "med": 5341.0931,
+            "max": 7712.0011,
+            "p(90)": 5391.00386,
+            "p(95)": 5607.23866
+        },
+        "http_req_tls_handshaking": {
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0
+        }
+    },
+    "setup_data": {
+        "cart": [
+            {
+                "_id": "000000000000000000000006",
+                "name": "NUS T-shirt Copy 6",
+                "price": 4.99
+            },
+            {
+                "_id": "000000000000000000000005",
+                "name": "The Law of Contract in Singapore Copy 5",
+                "price": 54.99
+            }
+        ],
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OWQ3NWNlMTc1YzMzYzVjNzViMWRkZTUiLCJpYXQiOjE3NzU3OTQ1ODIsImV4cCI6MTc3NjM5OTM4Mn0.DXLexPG0jc_Q4waataSjlxKkiNKylsXSM5GfygQ1yCI"
+    },
+    "root_group": {
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "payment endpoint returns success": {
+                    "name": "payment endpoint returns success",
+                    "path": "::payment endpoint returns success",
+                    "id": "0b7720a202fe1e62ba0e5c99675faea4",
+                    "passes": 16863,
+                    "fails": 0
+                },
+                "payment response has ok=true": {
+                    "name": "payment response has ok=true",
+                    "path": "::payment response has ok=true",
+                    "id": "d6a0231b3ffb16362bb264252f09c2e3",
+                    "passes": 16863,
+                    "fails": 0
+                }
+            },
+        "name": "",
+        "path": ""
+    }
+}

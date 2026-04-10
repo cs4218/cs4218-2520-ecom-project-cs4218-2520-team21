@@ -1,11 +1,11 @@
 // Paing Khant Kyaw, A0257992J
-// Windows (cmd):
-// set K6_WEB_DASHBOARD_PERIOD=1s && set K6_WEB_DASHBOARD=true && k6 run tests/load/braintree_token_load_test.js
+// Windows (pwsh):
+// $env:K6_WEB_DASHBOARD_PERIOD="1s"; $env:K6_WEB_DASHBOARD="true"; $env:K6_WEB_DASHBOARD_EXPORT="reports/braintree-token-load-report.html"; k6 run --summary-export=reports/braintree-token-load-summary.json tests/load/braintree_token_load_test.js
 import http from "k6/http";
 import { check, sleep } from "k6";
 
 const BASE_URL = "http://localhost:6060";
-const TARGET_VUS = 100;
+const TARGET_VUS = 150;
 
 export const options = {
   scenarios: {
@@ -13,9 +13,9 @@ export const options = {
       executor: "ramping-vus",
       startVUs: 1,
       stages: [
-        { duration: "2m", target: TARGET_VUS },
-        { duration: "5m", target: TARGET_VUS },
-        { duration: "2m", target: 0 },
+        { duration: "10m", target: TARGET_VUS },
+        { duration: "20m", target: TARGET_VUS },
+        { duration: "10m", target: 0 },
       ],
       gracefulRampDown: "30s",
     },
@@ -41,5 +41,5 @@ export default function () {
     },
   });
 
-  sleep(2);
+  sleep(5);
 }
