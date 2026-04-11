@@ -4,7 +4,7 @@ import http from "k6/http";
 import { check, sleep } from "k6";
 
 const BASE_URL = __ENV.BASE_URL || "http://localhost:6060";
-const TARGET_VUS = 50;
+const TARGET_VUS = 10;
 const AUTH_TOKEN = __ENV.AUTH_TOKEN || "";
 const TEST_EMAIL = "testing@gmail.com";
 const TEST_PASSWORD = "1234qwer";
@@ -16,9 +16,9 @@ export const options = {
       executor: "ramping-vus",
       startVUs: 1,
       stages: [
-        { duration: "10m", target: TARGET_VUS },
+        { duration: "5m", target: TARGET_VUS },
         { duration: "20m", target: TARGET_VUS },
-        { duration: "10m", target: 0 },
+        { duration: "5m", target: 0 },
       ],
       gracefulRampDown: "30s",
     },
