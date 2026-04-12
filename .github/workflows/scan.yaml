@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MONGO_URL: mongodb://localhost:27017
-      PORT: 6767
+      PORT: 6060
       DEV_MODE: development
       JWT_SECRET: SOMESECRET123456
       BRAINTREE_MERCHANT_ID: hmrc3kfrt2xrvtvp
@@ -75,6 +75,7 @@ jobs:
 
       - name: Run app
         run: |
+          npx kill-port --port 6060
           npm run dev &
 
       - name: ZAP Scan
