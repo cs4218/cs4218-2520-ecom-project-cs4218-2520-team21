@@ -10,7 +10,19 @@ import exec from "k6/execution";
 
 const BASE_URL = "http://localhost:6060";
 const CRASH_TOKEN = "recover-test-token";
-const CRASH_SCHEDULE_MS = [300000, 720000, 1200000];
+const CRASH_SCHEDULE_MS = [
+  180000, // 3m
+  300000, // 5m
+  420000, // 7m
+  540000, // 9m
+  720000, // 12m
+  900000, // 15m
+  1080000, // 18m
+  1200000, // 20m
+  1320000, // 22m
+  1440000, // 24m
+  1560000, // 26m
+];
 
 const triggeredCrashes = new Set();
 
@@ -18,7 +30,7 @@ export const options = {
   scenarios: {
     recovery: {
       executor: "constant-vus",
-      vus: 100,
+      vus: 50,
       duration: "30m",
     },
   },
