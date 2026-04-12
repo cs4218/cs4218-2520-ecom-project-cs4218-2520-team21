@@ -1,6 +1,6 @@
 // Xenos Fiorenzo Anong, A0257672U
 import JWT from "jsonwebtoken";
-import { requireSignIn } from "./authMiddleware.js";
+import { requireSignIn } from "../../middlewares/authMiddleware.js";
 
 jest.mock("jsonwebtoken");
 
