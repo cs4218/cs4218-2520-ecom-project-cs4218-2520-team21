@@ -1,7 +1,7 @@
 # Xenos Fiorenzo Anong, A0257672U
 # adapted from example code here: https://github.com/marketplace/actions/aqua-security-trivy
 
-name: "Code Scanning"
+name: "Security Testing"
 
 on:
   pull_request:
@@ -37,3 +37,39 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: "trivy-results.sarif"
+
+  dast-zap:
+    name: DAST - ZAP scan
+    runs-on: ubuntu-latest
+    env:
+      MONGO_URL: mongodb://localhost:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install client dependencies
+        run: |
+          cd client
+          npm install
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.12.1
+        with:
+          mongodb-version: "6.0"
+
+      - name: Run app
+        run: npm run dev
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.13.0
+        with:
+          target: "http://localhost"
