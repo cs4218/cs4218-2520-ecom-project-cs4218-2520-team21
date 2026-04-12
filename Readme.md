@@ -296,6 +296,7 @@ Each member has completed the non-functional testing for the following files:
 - security testing - CI workflow
   - .github/workflows/scan.yaml
 - jest security test cases: tests/security/\*
+- bug fix: add pages/Auth/Forgot.js
 
 ### Dhruvi Ketan Rathod
 
