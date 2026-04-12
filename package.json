@@ -15,10 +15,11 @@
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
     "sonarqube": "sonar-scanner",
-    "test": "npm run test:backend && npm run test:frontend",
+    "test": "npm run test:backend && npm run test:frontend && npm run test:security",
     "uitest": "playwright test",
     "test:frontend": "node node_modules/jest/bin/jest.js --config jest.frontend.config.js",
-    "test:backend": "node node_modules/jest/bin/jest.js --config jest.backend.config.cjs"
+    "test:backend": "node node_modules/jest/bin/jest.js --config jest.backend.config.cjs",
+    "test:security": "node node_modules/jest/bin/jest.js --config jest.security.config.js"
   },
   "keywords": [],
   "author": "RP",
