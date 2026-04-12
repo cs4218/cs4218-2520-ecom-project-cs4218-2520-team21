@@ -73,7 +73,9 @@ jobs:
           mongodb-version: "6.0"
 
       - name: Run app
-        run: npm run dev &
+        run: |
+          npm run server &
+          npm run client &
 
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.13.0
