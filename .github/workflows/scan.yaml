@@ -44,6 +44,7 @@ jobs:
     env:
       MONGO_URL: mongodb://localhost:27017
       PORT: 6060
+      DEV_MODE: development
       JWT_SECRET: SOMESECRET123456
       BRAINTREE_MERCHANT_ID: hmrc3kfrt2xrvtvp
       BRAINTREE_PUBLIC_KEY: d3rnqcjwn7zk4fpt
