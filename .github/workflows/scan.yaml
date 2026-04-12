@@ -1,5 +1,4 @@
 # Xenos Fiorenzo Anong, A0257672U
-# adapted from example code here: https://github.com/marketplace/actions/aqua-security-trivy
 
 name: "Security Testing"
 
@@ -15,6 +14,7 @@ on:
 
 jobs:
   sast-trivy:
+    # adapted from example code here: https://github.com/marketplace/actions/aqua-security-trivy
     name: SAST - Trivy code scan
     runs-on: ubuntu-24.04
     permissions:
@@ -85,6 +85,7 @@ jobs:
           target: "http://localhost:3000"
 
   jest-security:
+    name: Jest Security Test Cases
     runs-on: ubuntu-latest
 
     steps:
