@@ -295,3 +295,21 @@ Each member has completed the non-functional testing for the following files:
 
 - security testing - CI workflow
   - .github/workflows/scan.yaml
+
+### Dhruvi Ketan Rathod
+- tests/performance/spike/homepage_spike.js
+- tests/performance/spike/login_spike.js
+- tests/performance/spike/payment_spike.js
+- tests/performance/spike/product_detail_spike.js
+- Additionally html files were generated for all four tests containing its graphs and metrics 
+
+### Paing Khant Kyaw
+- test/load/braintree_payment_load_test.js
+- test/load/braintree_token_load_test.js
+- test/load/category_load_test.js
+- test/load/home_page_test.js
+- test/load/product_filters_load_test.js
+- test/load/product_list_load_test.js
+- test/load/search_load_test.js
+- test/recovery/backend_crash_recovery_test.js
+- Generated report html/json are under /reports folder
