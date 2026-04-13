@@ -21,31 +21,20 @@ import { login } from '../helpers/login.js';
 export const options = {
   // v4
   stages: [
-    { duration: '2m',  target: 100 },  // Baseline (Your Signup limit)
+    { duration: '2m',  target: 100 },
     { duration: '3m',  target: 100 },  
 
-    { duration: '2m',  target: 200 },  // First real test of Login capacity
+    { duration: '2m',  target: 200 },  
     { duration: '5m',  target: 200 },  
 
-    { duration: '2m',  target: 300 },  // Likely the "Danger Zone"
+    { duration: '2m',  target: 300 }, 
     { duration: '5m',  target: 300 },
 
-    { duration: '2m',  target: 400 },  // Extreme Peak
+    { duration: '2m',  target: 400 }, 
     { duration: '5m',  target: 400 },
 
-    { duration: '5m',  target: 0   },  // Recovery
+    { duration: '5m',  target: 0   }, 
   ],
-  // // v3
-  // stages: [
-  //   { duration: '3m',  target: 50  },  // warm-up
-  //   { duration: '3m',  target: 300 },  // ramp up
-  //   { duration: '10m', target: 300 },  // sustain at 150
-  //   { duration: '3m',  target: 400 },  // ramp up to peak
-  //   { duration: '10m', target: 400 },  // sustain at peak
-  //   { duration: '3m',  target: 600 },  // ramp up to peak
-  //   { duration: '10m', target: 600 },  // sustain at peak
-  //   { duration: '5m',  target: 0   },  // recovery
-  // ],
 
   thresholds: {
     http_req_failed:     ['rate<0.05'],
