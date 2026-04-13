@@ -298,7 +298,7 @@ Each member has completed the non-functional testing for the following files:
 - jest security test cases: tests/security/\*
 - bug fix: add pages/Auth/Forgot.js
 
-### Dhruvi Ketan Rathod
+#### Dhruvi Ketan Rathod
 
 - tests/performance/spike/homepage_spike.js
 - tests/performance/spike/login_spike.js
@@ -306,7 +306,7 @@ Each member has completed the non-functional testing for the following files:
 - tests/performance/spike/product_detail_spike.js
 - Additionally html files were generated for all four tests containing its graphs and metrics
 
-### Paing Khant Kyaw
+#### Paing Khant Kyaw
 
 - test/load/braintree_payment_load_test.js
 - test/load/braintree_token_load_test.js
@@ -317,3 +317,13 @@ Each member has completed the non-functional testing for the following files:
 - test/load/search_load_test.js
 - test/recovery/backend_crash_recovery_test.js
 - Generated report html/json are under /reports folder
+
+#### Ariella Thirza Callista 
+
+Stress testing: everything under `tests/stress` directory
+- tests/stress/helpers (all .js files in this directory)
+- tests/stress/filter-stress.js
+- tests/stress/login-stress.js
+- tests/stress/payment-stress.js
+- tests/stress/signup-stress.js
+- Additionally, html files were generated containing its graphs and metrics under the tests/stress/reports folder
