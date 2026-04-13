@@ -304,7 +304,7 @@ Each member has completed the non-functional testing for the following files:
 - tests/performance/spike/login_spike.js
 - tests/performance/spike/payment_spike.js
 - tests/performance/spike/product_detail_spike.js
-- Additionally html files were generated for all four tests containing its graphs and metrics
+- Additionally html files were generated and stored in the tests/performance/spike folder for all four tests containing the tests' graphs and metrics
 
 #### Paing Khant Kyaw
 
