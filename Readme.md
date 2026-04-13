@@ -327,3 +327,13 @@ Stress testing: everything under `tests/stress` directory
 - tests/stress/payment-stress.js
 - tests/stress/signup-stress.js
 - Additionally, html files were generated containing its graphs and metrics under the tests/stress/reports folder
+
+#### Lim Rui Ting Valencia
+
+Soak Testing
+- k6/scripts/soak-endurance-test.js
+The soak test focused on four primary user flows:
+  - browsing products (catalog retrieval),
+  - searching products (keyword-based search),
+  - category navigation (hierarchical data access), and
+  - product detail with related products (full product page simulation).
