@@ -337,3 +337,7 @@ The soak test focused on four primary user flows:
   - searching products (keyword-based search),
   - category navigation (hierarchical data access), and
   - product detail with related products (full product page simulation).
+
+## 10. AI Driven Testing
+Link to repo: https://github.com/ValenciaLim/cs4218-ai-test-bot
+
